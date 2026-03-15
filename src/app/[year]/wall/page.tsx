@@ -120,11 +120,18 @@ function GroupWall({
                   }}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <span className="font-sans text-sm" style={{ color: 'var(--color-text)' }}>
-                      {nominee.name}
-                    </span>
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-sans text-sm" style={{ color: 'var(--color-text)' }}>
+                        {nominee.name}
+                      </span>
+                      {nominee.film_title && (
+                        <span className="font-sans text-xs italic" style={{ color: 'var(--color-grey-3)' }}>
+                          {nominee.film_title}
+                        </span>
+                      )}
+                    </div>
                     <span
-                      className="font-sans text-sm font-bold tracking-wide"
+                      className="font-sans text-sm font-bold tracking-wide shrink-0"
                       style={{ color: '#967811' }}
                     >
                       KAZANAN
@@ -137,9 +144,16 @@ function GroupWall({
                   key={nominee.id}
                   className="flex items-center justify-between px-4 py-2.5"
                 >
-                  <span className="font-sans text-sm" style={{ color: 'var(--color-text)' }}>
-                    {nominee.name}
-                  </span>
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-sans text-sm" style={{ color: 'var(--color-text)' }}>
+                      {nominee.name}
+                    </span>
+                    {nominee.film_title && (
+                      <span className="font-sans text-xs italic" style={{ color: 'var(--color-grey-3)' }}>
+                        {nominee.film_title}
+                      </span>
+                    )}
+                  </div>
                   <AvatarStack users={users} />
                 </div>
               )
