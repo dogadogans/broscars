@@ -22,11 +22,11 @@ export default function JoinPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // If already joined on this device, skip to vote
+  // If already joined on this device, skip to wall (account exists)
   useEffect(() => {
     const stored = localStorage.getItem(NAME_KEY)
     if (stored && token) {
-      router.replace(`/${year}/vote`)
+      router.replace(`/${year}/wall`)
     }
   }, [token, year, router])
 
@@ -64,7 +64,11 @@ export default function JoinPage() {
       localStorage.setItem(NAME_KEY, trimmed)
       window.dispatchEvent(new Event('broscar:auth'))
 
-      router.push(`/${year}/vote`)
+      if (json.data.nameTaken) {
+        router.push(`/${year}/wall`)
+      } else {
+        router.push(`/${year}/vote`)
+      }
     } catch {
       setError(t('errors.genericError'))
     } finally {
