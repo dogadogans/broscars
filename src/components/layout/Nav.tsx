@@ -25,8 +25,6 @@ export default function Nav() {
   const [displayName, setDisplayName] = useState<string | null>(null)
   const [fallbackYear, setFallbackYear] = useState<number | null>(null)
 
-  if (pathname.endsWith('/admin')) return null
-
   useEffect(() => {
     const sync = () => setDisplayName(localStorage.getItem(NAME_KEY))
     sync()
@@ -51,6 +49,8 @@ export default function Nav() {
       })
       .catch(() => {})
   }, [year])
+
+  if (pathname.endsWith('/admin')) return null
 
   const activeYear = year ?? fallbackYear
   const leaderboardHref = activeYear ? `/${activeYear}/wall` : '/'

@@ -55,7 +55,7 @@ export async function GET(
 
     if (error) throw error
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line -- supabase join type
     const shaped: PickWithDetails[] = (picks ?? []).map((row: any) => ({
       pick: {
         id: row.id,
