@@ -414,7 +414,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <Button variant="outline" href={`/${year}/review`}>
+                <Button variant="outline" href={`/${year}/account?tab=picks`}>
                   Seçimlerimi Gör
                 </Button>
               </div>

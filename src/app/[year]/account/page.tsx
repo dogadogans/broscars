@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { Heart, LogOut } from 'lucide-react'
 import Avatar from '@/components/ui/Avatar'
 import Select from '@/components/ui/Select'
@@ -260,7 +260,6 @@ function PicksTab({
           >
             {picks.map((p) => {
               const isWinner = winnerMap.get(p.head_nominee.id) ?? false
-              const isHeartWinner = p.heart_nominee ? winnerMap.get(p.heart_nominee.id) ?? false : false
 
               if (isWinner) {
                 return (
@@ -287,7 +286,7 @@ function PicksTab({
                       <div className="mt-1 flex items-center gap-1">
                         <Heart
                           size={12}
-                          fill={isHeartWinner ? 'var(--color-danger-500)' : 'none'}
+                          fill='var(--color-danger-500)'
                           style={{ color: 'var(--color-danger-500)', flexShrink: 0 }}
                         />
                         <span className="font-sans text-sm" style={{ color: 'var(--color-danger-500)' }}>
@@ -314,7 +313,7 @@ function PicksTab({
                     <div className="mt-1 flex items-center gap-1">
                       <Heart
                         size={12}
-                        fill={isHeartWinner ? 'var(--color-danger-500)' : 'none'}
+                        fill='var(--color-danger-500)'
                         style={{ color: 'var(--color-danger-500)', flexShrink: 0 }}
                       />
                       <span className="font-sans text-sm" style={{ color: 'var(--color-danger-500)' }}>
@@ -337,11 +336,12 @@ function PicksTab({
 export default function AccountPage() {
   const { year: paramYear } = useParams<{ year: string }>()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { token } = useDeviceToken()
 
   const [displayName, setDisplayName]       = useState<string | null>(null)
   const [avatarColor, setAvatarColor]       = useState<string | null>(null)
-  const [tab, setTab]                       = useState<Tab>('stats')
+  const [tab, setTab]                       = useState<Tab>(searchParams.get('tab') === 'picks' ? 'picks' : 'stats')
   const [years, setYears]                   = useState<Year[]>([])
   const [selectedYear, setSelectedYear]     = useState(paramYear)
 
