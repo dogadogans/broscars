@@ -55,34 +55,24 @@ export default function HomePage() {
   }, [])
 
   useEffect(() => {
-    if (!currentYear) return
+    if (!currentYear || !token) return
 
     Promise.all([
-      fetch(`/api/${currentYear.year}/picks`).then((r) => r.json()),
       fetch(`/api/${currentYear.year}/nominees`).then((r) => r.json()),
       fetch(`/api/${currentYear.year}/participants`).then((r) => r.json()),
+      fetch(`/api/${currentYear.year}/my-picks`, {
+        headers: { 'x-device-token': token },
+      }).then((r) => r.json()),
     ])
-      .then(([picksJson, nomineesJson, participantsJson]) => {
-        const picks: { user?: { id: string; display_name: string } }[] =
-          picksJson.data ?? []
+      .then(([nomineesJson, participantsJson, myPicksJson]) => {
         const categories: unknown[] = nomineesJson.data ?? []
-
-        setParticipantCount(participantsJson.data?.count ?? 0)
         setTotalCategories(categories.length)
-
-        const name = localStorage.getItem(NAME_KEY)
-        if (name) {
-          const myPicks = picks.filter(
-            (p) =>
-              p.user?.display_name?.toLowerCase() === name.toLowerCase(),
-          )
-          setUserPickCount(myPicks.length)
-        }
-
+        setParticipantCount(participantsJson.data?.count ?? 0)
+        setUserPickCount(myPicksJson.data?.submitted_count ?? 0)
         setDataLoaded(true)
       })
       .catch(() => setDataLoaded(true))
-  }, [currentYear])
+  }, [currentYear, token])
 
   async function handleJoin(e: React.FormEvent) {
     e.preventDefault()

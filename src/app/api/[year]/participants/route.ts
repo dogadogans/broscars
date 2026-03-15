@@ -32,18 +32,15 @@ export async function GET(
       )
     }
 
-    const { data: userIds, error } = await supabase
-      .from('picks')
-      .select('user_id')
+    const { count, error } = await supabase
+      .from('year_participants')
+      .select('user_id', { count: 'exact', head: true })
       .eq('year_id', yearRecord.id)
-      .not('submitted_at', 'is', null)
-
-    const count = new Set((userIds ?? []).map((r) => r.user_id)).size
 
     if (error) throw error
 
     return NextResponse.json<ApiResponse<{ count: number }>>(
-      { data: { count }, error: null }
+      { data: { count: count ?? 0 }, error: null }
     )
   } catch (err) {
     console.error('[GET /api/[year]/participants]', err)
