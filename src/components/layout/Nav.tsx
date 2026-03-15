@@ -10,6 +10,7 @@ import { useGameState } from '@/hooks/useGameState'
 import { Swords, User } from 'lucide-react'
 
 const NAME_KEY = 'broscar_display_name'
+const COLOR_KEY = 'broscar_avatar_color'
 
 const RING = '0 0 0 1px rgba(170,170,170,0.50), 0 1px 2px rgba(41,41,41,0.08)'
 
@@ -23,10 +24,14 @@ function Subtitle({ year }: { year: number }) {
 export default function Nav() {
   const pathname = usePathname()
   const [displayName, setDisplayName] = useState<string | null>(null)
+  const [avatarColor, setAvatarColor] = useState<string | null>(null)
   const [fallbackYear, setFallbackYear] = useState<number | null>(null)
 
   useEffect(() => {
-    const sync = () => setDisplayName(localStorage.getItem(NAME_KEY))
+    const sync = () => {
+      setDisplayName(localStorage.getItem(NAME_KEY))
+      setAvatarColor(localStorage.getItem(COLOR_KEY))
+    }
     sync()
     window.addEventListener('broscar:auth', sync)
     window.addEventListener('storage', sync)
@@ -95,7 +100,7 @@ export default function Nav() {
 
           {displayName ? (
             <Link href={activeYear ? `/${activeYear}/account` : '/'} aria-label="Hesabım">
-              <Avatar displayName={displayName} color={getAvatarColor(displayName)} size="sm" />
+              <Avatar displayName={displayName} color={avatarColor ?? getAvatarColor(displayName)} size="sm" />
             </Link>
           ) : (
             <Link

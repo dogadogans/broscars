@@ -11,6 +11,7 @@ import type { RankedScore, PickWithDetails, CategoryWithNominees, Year } from '@
 
 const NAME_KEY  = 'broscar_display_name'
 const TOKEN_KEY = 'broscar_token'
+const COLOR_KEY = 'broscar_avatar_color'
 
 type Tab = 'stats' | 'picks'
 
@@ -339,6 +340,7 @@ export default function AccountPage() {
   const { token } = useDeviceToken()
 
   const [displayName, setDisplayName]       = useState<string | null>(null)
+  const [avatarColor, setAvatarColor]       = useState<string | null>(null)
   const [tab, setTab]                       = useState<Tab>('stats')
   const [years, setYears]                   = useState<Year[]>([])
   const [selectedYear, setSelectedYear]     = useState(paramYear)
@@ -361,6 +363,7 @@ export default function AccountPage() {
     const name = localStorage.getItem(NAME_KEY)
     if (!name) { router.replace('/join'); return }
     setDisplayName(name)
+    setAvatarColor(localStorage.getItem(COLOR_KEY))
 
     fetch('/api/years')
       .then((r) => r.json())
@@ -451,7 +454,7 @@ export default function AccountPage() {
         style={{ background: 'var(--color-surface)', boxShadow: CARD_SHADOW }}
       >
         <div className="flex items-center gap-3">
-          <Avatar displayName={displayName} color={getAvatarColor(displayName)} size="md" />
+          <Avatar displayName={displayName} color={avatarColor ?? getAvatarColor(displayName)} size="md" />
           <p className="font-sans text-xl font-semibold" style={{ color: 'var(--color-text)' }}>
             {displayName}
           </p>

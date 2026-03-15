@@ -62,6 +62,9 @@ export default function JoinPage() {
 
       localStorage.setItem('broscar_token', json.data.token)
       localStorage.setItem(NAME_KEY, trimmed)
+      if (json.data.user?.avatar_color) {
+        localStorage.setItem('broscar_avatar_color', json.data.user.avatar_color)
+      }
       window.dispatchEvent(new Event('broscar:auth'))
 
       if (json.data.nameTaken) {
