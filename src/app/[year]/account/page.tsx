@@ -6,6 +6,7 @@ import { Heart, LogOut } from 'lucide-react'
 import Avatar from '@/components/ui/Avatar'
 import Select from '@/components/ui/Select'
 import { getAvatarColor } from '@/lib/utils/avatar'
+import { useDeviceToken } from '@/hooks/useDeviceToken'
 import type { RankedScore, PickWithDetails, CategoryWithNominees, Year } from '@/types'
 
 const NAME_KEY  = 'broscar_display_name'
@@ -335,6 +336,7 @@ function PicksTab({
 export default function AccountPage() {
   const { year: paramYear } = useParams<{ year: string }>()
   const router = useRouter()
+  const { token } = useDeviceToken()
 
   const [displayName, setDisplayName]       = useState<string | null>(null)
   const [tab, setTab]                       = useState<Tab>('stats')
@@ -382,22 +384,23 @@ export default function AccountPage() {
       .catch(() => {})
   }, [paramYear, router])
 
-  // Fetch data whenever selectedYear or displayName changes
+  // Fetch data whenever selectedYear, displayName, or token changes
   useEffect(() => {
-    if (!displayName) return
+    if (!displayName || !token) return
     setLoadingYear(true)
 
     Promise.all([
       fetch(`/api/${selectedYear}/state`).then((r) => r.json()),
-      fetch(`/api/${selectedYear}/picks`).then((r) => r.json()),
+      fetch(`/api/${selectedYear}/my-picks`, {
+        headers: { 'x-device-token': token },
+      }).then((r) => r.json()),
       fetch(`/api/${selectedYear}/nominees`).then((r) => r.json()),
     ])
-      .then(async ([stateJson, picksJson, nomJson]) => {
+      .then(async ([stateJson, myPicksJson, nomJson]) => {
         const state: string = stateJson.data?.state ?? 'voting'
         setYearState(state)
 
-        const allPicks: PickWithDetails[] = picksJson.data ?? []
-        const mine = allPicks.filter((p) => p.user.display_name === displayName)
+        const mine: PickWithDetails[] = myPicksJson.data?.picks ?? []
         setMyPicks(mine)
         setMyPicksCount(mine.length)
 
@@ -415,7 +418,7 @@ export default function AccountPage() {
       })
       .catch(() => {})
       .finally(() => setLoadingYear(false))
-  }, [selectedYear, displayName])
+  }, [selectedYear, displayName, token])
 
   function handleLogout() {
     localStorage.removeItem(TOKEN_KEY)

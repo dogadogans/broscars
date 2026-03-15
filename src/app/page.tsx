@@ -68,7 +68,7 @@ export default function HomePage() {
         const categories: unknown[] = nomineesJson.data ?? []
         setTotalCategories(categories.length)
         setParticipantCount(participantsJson.data?.count ?? 0)
-        setUserPickCount(myPicksJson.data?.submitted_count ?? 0)
+        setUserPickCount(myPicksJson.data?.submitted_count ?? myPicksJson.data?.picks?.length ?? 0)
         setDataLoaded(true)
       })
       .catch(() => setDataLoaded(true))
