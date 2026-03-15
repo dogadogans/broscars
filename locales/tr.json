@@ -1,0 +1,131 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "langToggle": "EN",
+    "nextOscars": "Sonraki Oscars"
+  },
+  "home": {
+    "title": "Broscar",
+    "subtitle": "Sen ve arkadaşların için Oscar tahminleri",
+    "currentYear": "{{year}} Oscars",
+    "pastYears": "Geçmiş Yıllar",
+    "joinCta": "Tahminlerini yap",
+    "viewResults": "Sonuçları gör",
+    "viewLeaderboard": "Sıralamayı gör"
+  },
+  "join": {
+    "heading": "Katıl",
+    "namePlaceholder": "Adın",
+    "nameLabel": "Görünen ad",
+    "avatarPreview": "Avatarın",
+    "submit": "Hadi başlayalım",
+    "nameHint": "Bi kere seçtikten sonra değiştiremezsin"
+  },
+  "vote": {
+    "progress": "{{current}} / {{total}}",
+    "headPickLabel": "Kazanacağını düşündüğün?",
+    "heartPickLabel": "Kazanmasını istediğin?",
+    "notePlaceholder": "Not ekle (isteğe bağlı)",
+    "prev": "Geri",
+    "next": "İleri",
+    "reviewAll": "Tahminleri incele",
+    "unanswered": "{{count}} cevapsız"
+  },
+  "review": {
+    "heading": "Tahminlerini incele",
+    "category": "Kategori",
+    "headPick": "Kazanacak",
+    "heartPick": "Kazanmasını istiyorum",
+    "note": "Not",
+    "edit": "Düzenle",
+    "submit": "Tahminlerimi kilitle",
+    "unansweredWarning": "{{count}} cevapsız kategorin var. Yine de gönderebilirsin."
+  },
+  "wall": {
+    "heading": "Grup Duvarı",
+    "byPerson": "Kişiye Göre",
+    "byCategory": "Kategoriye Göre",
+    "empty": "Henüz tahmin yok. İlk sen ol!",
+    "submitted": "Gönderildi",
+    "notSubmitted": "Devam ediyor"
+  },
+  "results": {
+    "heading": "Sonuçlar",
+    "leaderboard": "Sıralama",
+    "rank": "Sıra",
+    "player": "Oyuncu",
+    "score": "Puan",
+    "accuracy": "İsabet Oranı",
+    "heartCorrect": "Kalp isabetleri",
+    "winner": "Kazanan",
+    "notAvailable": "Sonuçlar henüz mevcut değil.",
+    "correct": "Doğru",
+    "incorrect": "Yanlış"
+  },
+  "admin": {
+    "heading": "Yönetici",
+    "passwordPlaceholder": "Yönetici şifresi",
+    "passwordHint": "Devam etmek için yönetici şifreni gir.",
+    "unlock": "Aç",
+    "wrongPassword": "Hatalı şifre.",
+    "nomineesSection": "Adayları Yükle",
+    "nomineesSubtitle": "JSON formatında kategori ve aday listesini yapıştır. Tekrar çalıştırılabilir — upsert yapar.",
+    "stateSection": "Oyun Durumu",
+    "stateSubtitle": "Kullanıcıların ne göreceğini kontrol eder. Seçmek için tıkla.",
+    "winnersSection": "Kazananları Gir",
+    "winnersSubtitle": "Her kategori için kazananı seç, ardından puanları hesapla.",
+    "calculateScores": "Puanları Hesapla",
+    "setVoting": "Oy vermeye aç",
+    "setResults": "Sonuçlara geç",
+    "setOffseason": "Sezon dışına al",
+    "saveNominees": "Adayları Kaydet",
+    "saveWinners": "Kazananları Kaydet ve Hesapla",
+    "successState": "Oyun durumu güncellendi.",
+    "successNominees": "Adaylar kaydedildi.",
+    "successWinners": "Kazananlar kaydedildi ve puanlar hesaplandı.",
+    "loadNominees": "Adayları Yükle",
+    "loadCategories": "Kategorileri Yükle",
+    "loadedCategories": "{{year}} için {{count}} kategori yüklendi.",
+    "invalidJson": "Geçersiz JSON — formatı kontrol et.",
+    "stateUpdated": "Durum '{{state}}' olarak güncellendi.",
+    "failedLoadNominees": "Adaylar yüklenemedi.",
+    "winnersSaved": "Kazananlar kaydedildi. {{count}} puan hesaplandı.",
+    "offseasonSet": "Sezon dışına alındı. Tamamlandı!",
+    "failedOffseason": "Sezon dışına alma başarısız.",
+    "networkError": "Ağ hatası.",
+    "failed": "Başarısız.",
+    "saving": "Kaydediliyor…",
+    "loading": "Yükleniyor…",
+    "updating": "Güncelleniyor…",
+    "setOffseasonBtn": "Sezon Dışına Al",
+    "votingLabel": "Oylama",
+    "votingDesc": "Arkadaşlar tahmin yapabilir",
+    "resultsLabel": "Sonuçlar",
+    "resultsDesc": "Sıralama görünür",
+    "offseasonLabel": "Sezon Dışı",
+    "offseasonDesc": "Aktif bir şey yok"
+  },
+  "errors": {
+    "nameRequired": "Ad gerekli.",
+    "nameTaken": "Bu ad bu yıl zaten alınmış.",
+    "genericError": "Bir şeyler ters gitti. Lütfen tekrar dene.",
+    "notFound": "Bulunamadı.",
+    "unauthorized": "Yetkisiz.",
+    "somethingWentWrong": "Bir şeyler ters gitti",
+    "unexpectedError": "Beklenmedik bir hata oluştu.",
+    "tryAgain": "Tekrar dene"
+  },
+  "states": {
+    "voting": "Oylama açık",
+    "results": "Sonuçlar açıklandı",
+    "offseason": "Gelecek yıla kadar görüşürüz"
+  },
+  "common": {
+    "loading": "Yükleniyor...",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "back": "Geri",
+    "yes": "Evet",
+    "no": "Hayır"
+  }
+}

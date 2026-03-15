@@ -1,0 +1,131 @@
+{
+  "nav": {
+    "home": "Home",
+    "langToggle": "TR",
+    "nextOscars": "Next Oscars"
+  },
+  "home": {
+    "title": "Broscar",
+    "subtitle": "Oscar predictions for you and your people",
+    "currentYear": "{{year}} Oscars",
+    "pastYears": "Past Years",
+    "joinCta": "Make your picks",
+    "viewResults": "View results",
+    "viewLeaderboard": "View leaderboard"
+  },
+  "join": {
+    "heading": "Join",
+    "namePlaceholder": "Your name",
+    "nameLabel": "Display name",
+    "avatarPreview": "Your avatar",
+    "submit": "Let's go",
+    "nameHint": "This is how others will see you."
+  },
+  "vote": {
+    "progress": "{{current}} of {{total}}",
+    "headPickLabel": "Who will win?",
+    "heartPickLabel": "Who do you want to win?",
+    "notePlaceholder": "Add a note (optional)",
+    "prev": "Back",
+    "next": "Next",
+    "reviewAll": "Review picks",
+    "unanswered": "{{count}} unanswered"
+  },
+  "review": {
+    "heading": "Review your picks",
+    "category": "Category",
+    "headPick": "Will win",
+    "heartPick": "Want to win",
+    "note": "Note",
+    "edit": "Edit",
+    "submit": "Lock in my picks",
+    "unansweredWarning": "You have {{count}} unanswered categories. You can still submit."
+  },
+  "wall": {
+    "heading": "Group Wall",
+    "byPerson": "By Person",
+    "byCategory": "By Category",
+    "empty": "No picks yet. Be the first!",
+    "submitted": "Submitted",
+    "notSubmitted": "In progress"
+  },
+  "results": {
+    "heading": "Results",
+    "leaderboard": "Leaderboard",
+    "rank": "Rank",
+    "player": "Player",
+    "score": "Score",
+    "accuracy": "Accuracy",
+    "heartCorrect": "Heart hits",
+    "winner": "Winner",
+    "notAvailable": "Results aren't available yet.",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
+  },
+  "admin": {
+    "heading": "Admin",
+    "passwordPlaceholder": "Admin password",
+    "passwordHint": "Enter your admin password to continue.",
+    "unlock": "Unlock",
+    "wrongPassword": "Incorrect password.",
+    "nomineesSection": "Load Nominees",
+    "nomineesSubtitle": "Paste a JSON array of categories with nominees. Safe to re-run — upserts.",
+    "stateSection": "Game State",
+    "stateSubtitle": "Controls what users see. Click to switch.",
+    "winnersSection": "Enter Winners",
+    "winnersSubtitle": "Select the winner for each category, then calculate scores.",
+    "calculateScores": "Calculate Scores",
+    "setVoting": "Set to Voting",
+    "setResults": "Set to Results",
+    "setOffseason": "Set to Off-season",
+    "saveNominees": "Save Nominees",
+    "saveWinners": "Save Winners & Calculate Scores",
+    "successState": "Game state updated.",
+    "successNominees": "Nominees saved.",
+    "successWinners": "Winners saved and scores calculated.",
+    "loadNominees": "Load Nominees",
+    "loadCategories": "Load Categories",
+    "loadedCategories": "Loaded {{count}} categories for {{year}}.",
+    "invalidJson": "Invalid JSON — check the format.",
+    "stateUpdated": "State updated.",
+    "failedLoadNominees": "Failed to load nominees.",
+    "winnersSaved": "Winners saved. {{count}} scores calculated.",
+    "offseasonSet": "Set to offseason. All done!",
+    "failedOffseason": "Failed to set offseason.",
+    "networkError": "Network error.",
+    "failed": "Failed.",
+    "saving": "Saving…",
+    "loading": "Loading…",
+    "updating": "Updating…",
+    "setOffseasonBtn": "Set to Offseason",
+    "votingLabel": "Voting",
+    "votingDesc": "Friends can submit picks",
+    "resultsLabel": "Results",
+    "resultsDesc": "Leaderboard is visible",
+    "offseasonLabel": "Offseason",
+    "offseasonDesc": "Nothing active"
+  },
+  "errors": {
+    "nameRequired": "Name is required.",
+    "nameTaken": "That name is already taken this year.",
+    "genericError": "Something went wrong. Please try again.",
+    "notFound": "Not found.",
+    "unauthorized": "Unauthorized.",
+    "somethingWentWrong": "Something went wrong",
+    "unexpectedError": "An unexpected error occurred.",
+    "tryAgain": "Try again"
+  },
+  "states": {
+    "voting": "Voting is open",
+    "results": "Results are in",
+    "offseason": "See you next year"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "yes": "Yes",
+    "no": "No"
+  }
+}

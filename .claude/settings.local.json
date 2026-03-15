@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la /c/Users/Oem/Desktop/broscars/src/app/[year]/)",
+      "Bash(xargs ls:*)",
+      "Bash(find /c/Users/Oem/Desktop/broscars/src -type f -name *.tsx -o -name *.ts)",
+      "Bash(grep -E \"^/c/Users/Oem/Desktop/broscars/src/[^/]+/[^/]+$\")",
+      "Bash(ls -la /c/Users/Oem/Desktop/broscars/src/app/[year])",
+      "Bash(find c:UsersOemDesktopbroscars/src -type f -name *admin* -o -path *admin*)",
+      "Bash(grep -rn \"Game State\\\\|Enter Winners\\\\|Voting\\\\|Results\\\\|Offseason\\\\|Friends can\\\\|Leaderboard is\\\\|Nothing active\\\\|Loading\\\\|Saving\\\\|Updating\\\\|Loaded\\\\|State set to\\\\|Save Winners\\\\|Set to\\\\|Load Categories\\\\|Controls what users\" /c/Users/Oem/Desktop/broscars/src/app/[year]/admin/page.tsx)",
+      "Bash(ls -la /c/Users/Oem/Desktop/broscars/src/app/api/[year]/)",
+      "Bash(find c:UsersOemDesktopbroscars -maxdepth 2 -name .* -o -name *.env* -o -name *.config.*)"
+    ]
+  }
+}
