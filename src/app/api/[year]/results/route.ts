@@ -84,7 +84,8 @@ export async function GET(
     const ranked = rankScores(scoreResults, users, totalCategories ?? 0)
 
     return NextResponse.json<ApiResponse<RankedScore[]>>(
-      { data: ranked, error: null }
+      { data: ranked, error: null },
+      { headers: { 'Cache-Control': 'no-store, max-age=0' } }
     )
   } catch (err) {
     console.error('[GET /api/[year]/results]', err)

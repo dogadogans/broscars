@@ -51,7 +51,8 @@ export async function GET(
     if (catError) throw catError
 
     return NextResponse.json<ApiResponse<CategoryWithNominees[]>>(
-      { data: categories as CategoryWithNominees[], error: null }
+      { data: categories as CategoryWithNominees[], error: null },
+      { headers: { 'Cache-Control': 'no-store, max-age=0' } }
     )
   } catch (err) {
     console.error('[GET /api/[year]/nominees]', err)

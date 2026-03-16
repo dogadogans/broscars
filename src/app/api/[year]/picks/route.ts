@@ -76,7 +76,8 @@ export async function GET(
     }))
 
     return NextResponse.json<ApiResponse<PickWithDetails[]>>(
-      { data: shaped, error: null }
+      { data: shaped, error: null },
+      { headers: { 'Cache-Control': 'no-store, max-age=0' } }
     )
   } catch (err) {
     console.error('[GET /api/[year]/picks]', err)
