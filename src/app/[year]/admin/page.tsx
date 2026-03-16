@@ -335,7 +335,7 @@ function WinnerNomineeCard({
 
 function WinnersSection({ year, password }: { year: string; password: string }) {
   const [categories, setCategories] = useState<CategoryWithNominees[]>([])
-  const [winners, setWinners] = useState<Record<string, string>>({})
+  const [winners, setWinners] = useState<Record<string, string[]>>({})
   const [fetched, setFetched] = useState(false)
   const [fetching, setFetching] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -350,10 +350,10 @@ function WinnersSection({ year, password }: { year: string; password: string }) 
       const res = await fetch(`/api/${year}/nominees`)
       const data = await res.json()
       const cats: CategoryWithNominees[] = data.data ?? []
-      const preselected: Record<string, string> = {}
+      const preselected: Record<string, string[]> = {}
       for (const cat of cats) {
-        const winner = cat.nominees.find((n) => n.is_winner)
-        if (winner) preselected[cat.id] = winner.id
+        const catWinners = cat.nominees.filter((n) => n.is_winner).map((n) => n.id)
+        if (catWinners.length > 0) preselected[cat.id] = catWinners
       }
       setCategories(cats)
       setWinners(preselected)
@@ -366,16 +366,19 @@ function WinnersSection({ year, password }: { year: string; password: string }) 
   }
 
   function toggleWinner(catId: string, nomineeId: string) {
-    setWinners((prev) => ({
-      ...prev,
-      [catId]: prev[catId] === nomineeId ? '' : nomineeId,
-    }))
+    setWinners((prev) => {
+      const current = prev[catId] ?? []
+      const next = current.includes(nomineeId)
+        ? current.filter((id) => id !== nomineeId)
+        : [...current, nomineeId]
+      return { ...prev, [catId]: next }
+    })
   }
 
   async function handleSubmit() {
     setSubmitting(true)
     setStatus(null)
-    const winnerList = Object.values(winners).filter(Boolean).map((id) => ({ nominee_id: id }))
+    const winnerList = Object.values(winners).flat().filter(Boolean).map((id) => ({ nominee_id: id }))
     try {
       const res = await fetch(`/api/${year}/admin/winners`, {
         method: 'POST',
@@ -415,7 +418,7 @@ function WinnersSection({ year, password }: { year: string; password: string }) 
                     key={n.id}
                     name={n.name}
                     filmTitle={n.film_title}
-                    selected={winners[cat.id] === n.id}
+                    selected={(winners[cat.id] ?? []).includes(n.id)}
                     onClick={() => toggleWinner(cat.id, n.id)}
                   />
                 ))}
