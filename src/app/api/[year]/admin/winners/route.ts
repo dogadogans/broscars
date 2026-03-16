@@ -100,7 +100,9 @@ export async function POST(
       .in('category_id', (categoryIds ?? []).map((c: { id: string }) => c.id))
 
     const winnerIdSet = new Set([...(dbWinners ?? []).map((n: { id: string }) => n.id)])
+    console.log('[winners] submitted:', winnerIds.length, 'db_winners:', winnerIdSet.size, 'picks:', (picks ?? []).length)
     const scoreResults = calculateScores(picks as UserPick[], winnerIdSet)
+    console.log('[winners] scores:', scoreResults.map(s => `${s.user_id.slice(0,8)}:${s.score}`))
 
     // Upsert scores
     const scoreRows = scoreResults.map((s) => ({
