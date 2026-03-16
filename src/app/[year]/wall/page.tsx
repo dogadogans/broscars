@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Avatar from '@/components/ui/Avatar'
 import Select from '@/components/ui/Select'
 import { useTranslation } from '@/hooks/useTranslation'
@@ -244,7 +244,8 @@ export default function WallPage() {
   const router = useRouter()
   const { locale } = useTranslation()
 
-  const [tab, setTab] = useState<Tab>('wall')
+  const searchParams = useSearchParams()
+  const [tab, setTab] = useState<Tab>((searchParams.get('tab') as Tab) ?? 'wall')
   const [picks, setPicks] = useState<PickWithDetails[]>([])
   const [nominees, setNominees] = useState<CategoryWithNominees[]>([])
   const [results, setResults] = useState<RankedScore[] | null>(null)

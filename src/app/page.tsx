@@ -437,7 +437,7 @@ export default function HomePage() {
                     Oscars {year} sona erdi
                   </div>
                 </div>
-                <Button variant="outline" href={`/${year}/results`}>
+                <Button variant="outline" href={`/${year}/wall?tab=leaderboard`}>
                   Sonuçları Gör
                 </Button>
               </div>
