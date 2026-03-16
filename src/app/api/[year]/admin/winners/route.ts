@@ -92,7 +92,14 @@ export async function POST(
 
     if (usersError) throw usersError
 
-    const winnerIdSet = new Set(winnerIds)
+    // Fetch actual is_winner nominees from DB (authoritative source, not just submitted IDs)
+    const { data: dbWinners } = await supabase
+      .from('nominees')
+      .select('id')
+      .eq('is_winner', true)
+      .in('category_id', (categoryIds ?? []).map((c: { id: string }) => c.id))
+
+    const winnerIdSet = new Set([...(dbWinners ?? []).map((n: { id: string }) => n.id)])
     const scoreResults = calculateScores(picks as UserPick[], winnerIdSet)
 
     // Upsert scores
