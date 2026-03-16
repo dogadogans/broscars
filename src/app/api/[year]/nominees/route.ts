@@ -44,14 +44,35 @@ export async function GET(
 
     const { data: categories, error: catError } = await supabase
       .from('categories')
-      .select('*, nominees(*)')
+      .select('*')
       .eq('year_id', yearRecord.id)
       .order('order_index', { ascending: true })
 
     if (catError) throw catError
 
+    const categoryIds = (categories ?? []).map((c: { id: string }) => c.id)
+
+    const { data: nominees, error: nomError } = await supabase
+      .from('nominees')
+      .select('id, category_id, name, film_title, is_winner')
+      .in('category_id', categoryIds)
+
+    if (nomError) throw nomError
+
+    const nomineesByCategory = new Map<string, unknown[]>()
+    for (const n of nominees ?? []) {
+      const nom = n as { category_id: string }
+      if (!nomineesByCategory.has(nom.category_id)) nomineesByCategory.set(nom.category_id, [])
+      nomineesByCategory.get(nom.category_id)!.push(n)
+    }
+
+    const result = (categories ?? []).map((cat: { id: string }) => ({
+      ...cat,
+      nominees: nomineesByCategory.get(cat.id) ?? [],
+    }))
+
     return NextResponse.json<ApiResponse<CategoryWithNominees[]>>(
-      { data: categories as CategoryWithNominees[], error: null },
+      { data: result as CategoryWithNominees[], error: null },
       { headers: { 'Cache-Control': 'no-store, max-age=0' } }
     )
   } catch (err) {
