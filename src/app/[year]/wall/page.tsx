@@ -239,10 +239,10 @@ export default function WallPage() {
 
   useEffect(() => {
     Promise.all([
-      fetch(`/api/${year}/picks`).then((r) => r.json()),
-      fetch(`/api/${year}/nominees`).then((r) => r.json()),
-      fetch(`/api/${year}/state`).then((r) => r.json()),
-      fetch(`/api/years`).then((r) => r.json()),
+      fetch(`/api/${year}/picks`, { cache: 'no-store' }).then((r) => r.json()),
+      fetch(`/api/${year}/nominees`, { cache: 'no-store' }).then((r) => r.json()),
+      fetch(`/api/${year}/state`, { cache: 'no-store' }).then((r) => r.json()),
+      fetch(`/api/years`, { cache: 'no-store' }).then((r) => r.json()),
     ])
       .then(([picksJson, nomJson, stateJson, yearsJson]) => {
         setPicks(picksJson.data ?? [])
@@ -256,7 +256,7 @@ export default function WallPage() {
 
   useEffect(() => {
     if (yearState !== 'results') return
-    fetch(`/api/${year}/results`)
+    fetch(`/api/${year}/results`, { cache: 'no-store' })
       .then((r) => r.json())
       .then((json) => setResults(json.data ?? null))
       .catch(() => {})
