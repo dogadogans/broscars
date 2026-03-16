@@ -238,7 +238,7 @@ function GameStateSection({ year, password }: { year: string; password: string }
   const { t } = useTranslation()
 
   useEffect(() => {
-    fetch(`/api/${year}/state`)
+    fetch(`/api/${year}/state`, { cache: 'no-store' })
       .then((r) => r.json())
       .then((d) => setCurrent(d.data?.state ?? null))
       .catch(() => {})
@@ -347,7 +347,7 @@ function WinnersSection({ year, password }: { year: string; password: string }) 
   async function loadNominees() {
     setFetching(true)
     try {
-      const res = await fetch(`/api/${year}/nominees`)
+      const res = await fetch(`/api/${year}/nominees`, { cache: 'no-store' })
       const data = await res.json()
       const cats: CategoryWithNominees[] = data.data ?? []
       const preselected: Record<string, string[]> = {}
