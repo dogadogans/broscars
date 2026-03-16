@@ -40,7 +40,10 @@ export async function GET(
       )
     }
 
-    return NextResponse.json<ApiResponse<Year>>({ data: data as Year, error: null })
+    return NextResponse.json<ApiResponse<Year>>(
+      { data: data as Year, error: null },
+      { headers: { 'Cache-Control': 'no-store, max-age=0' } }
+    )
   } catch (err) {
     console.error('[GET /api/[year]/state]', err)
     return NextResponse.json<ApiResponse<null>>(
