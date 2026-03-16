@@ -3,6 +3,8 @@ import { supabase } from '@/lib/supabase/server'
 import { isMock, getMockNominees } from '@/lib/mock'
 import type { ApiResponse, CategoryWithNominees } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/[year]/nominees
 // Returns all categories with their nominees for the given year, sorted by order_index.
 

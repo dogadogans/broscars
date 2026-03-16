@@ -4,6 +4,8 @@ import { resolveUserFromToken } from '@/lib/utils/token'
 import { isMock, getMockPicks } from '@/lib/mock'
 import type { ApiResponse, LocalPick, PickWithDetails } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/[year]/picks
 // Returns all submitted picks for the year (for the group wall).
 // No auth required — public read.

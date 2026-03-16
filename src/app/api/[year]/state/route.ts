@@ -3,6 +3,8 @@ import { supabase } from '@/lib/supabase/server'
 import { isMock, MOCK_YEARS } from '@/lib/mock'
 import type { ApiResponse, GameState, Year } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/[year]/state
 // Returns the current game state for the year.
 // Used by useGameState hook.

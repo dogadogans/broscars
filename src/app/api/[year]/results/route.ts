@@ -4,6 +4,8 @@ import { rankScores } from '@/lib/utils/scoring'
 import { isMock, getMockResults, MOCK_YEARS } from '@/lib/mock'
 import type { ApiResponse, RankedScore } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/[year]/results
 // Returns the leaderboard for the given year, sorted by PRD §7 tiebreaker rules.
 // Only available when game state is 'results'.
