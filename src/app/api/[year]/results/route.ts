@@ -58,13 +58,22 @@ export async function GET(
       )
     }
 
-    // Fetch scores joined with users
+    // Fetch scores separately to avoid PostgREST join caching
     const { data: scores, error: scoresError } = await supabase
       .from('scores')
-      .select('*, users(id, display_name, avatar_color)')
+      .select('user_id, score, heart_correct')
       .eq('year_id', yearRecord.id)
 
     if (scoresError) throw scoresError
+
+    const userIds = (scores ?? []).map((s: { user_id: string }) => s.user_id)
+
+    const { data: users, error: usersError } = await supabase
+      .from('users')
+      .select('id, display_name, avatar_color')
+      .in('id', userIds)
+
+    if (usersError) throw usersError
 
     // Count total categories for accuracy calculation
     const { count: totalCategories } = await supabase
@@ -72,14 +81,11 @@ export async function GET(
       .select('id', { count: 'exact', head: true })
       .eq('year_id', yearRecord.id)
 
-    const scoreResults = (scores ?? []).map((s: Record<string, unknown>) => ({
-      user_id: (s.users as { id: string }).id,
-      score: s.score as number,
-      heart_correct: s.heart_correct as number,
+    const scoreResults = (scores ?? []).map((s: { user_id: string; score: number; heart_correct: number }) => ({
+      user_id: s.user_id,
+      score: s.score,
+      heart_correct: s.heart_correct,
     }))
-    const users = (scores ?? []).map((s: Record<string, unknown>) =>
-      s.users as { id: string; display_name: string; avatar_color: string }
-    )
 
     const ranked = rankScores(scoreResults, users, totalCategories ?? 0)
 
