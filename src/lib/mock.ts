@@ -38,7 +38,7 @@ const CAT = {
 function nid(cat: string, i: number) { return `nom-${cat}-${i}` }
 
 export const MOCK_YEARS = [
-  { id: Y,   year: 2026, state: 'voting'  as const, created_at: '2026-01-15T00:00:00Z' },
+  { id: Y,   year: 2026, state: 'results' as const, created_at: '2026-01-15T00:00:00Z' },
   { id: Y25, year: 2025, state: 'results' as const, created_at: '2025-01-15T00:00:00Z' },
 ]
 
@@ -53,7 +53,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
       { id: nid('pic', 3), category_id: CAT.picture, name: 'Frankenstein',              film_title: null, is_winner: false },
       { id: nid('pic', 4), category_id: CAT.picture, name: 'Hamnet',                    film_title: null, is_winner: false },
       { id: nid('pic', 5), category_id: CAT.picture, name: 'Marty Supreme',             film_title: null, is_winner: false },
-      { id: nid('pic', 6), category_id: CAT.picture, name: 'One Battle after Another',  film_title: null, is_winner: false },
+      { id: nid('pic', 6), category_id: CAT.picture, name: 'One Battle after Another',  film_title: null, is_winner: true  },
       { id: nid('pic', 7), category_id: CAT.picture, name: 'The Secret Agent',          film_title: null, is_winner: false },
       { id: nid('pic', 8), category_id: CAT.picture, name: 'Sentimental Value',         film_title: null, is_winner: false },
       { id: nid('pic', 9), category_id: CAT.picture, name: 'Sinners',                   film_title: null, is_winner: false },
@@ -68,7 +68,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     nominees: [
       { id: nid('dir', 1), category_id: CAT.director, name: 'Chloé Zhao',            film_title: 'Hamnet',                  is_winner: false },
       { id: nid('dir', 2), category_id: CAT.director, name: 'Josh Safdie',            film_title: 'Marty Supreme',           is_winner: false },
-      { id: nid('dir', 3), category_id: CAT.director, name: 'Paul Thomas Anderson',   film_title: 'One Battle after Another', is_winner: false },
+      { id: nid('dir', 3), category_id: CAT.director, name: 'Paul Thomas Anderson',   film_title: 'One Battle after Another', is_winner: true  },
       { id: nid('dir', 4), category_id: CAT.director, name: 'Joachim Trier',          film_title: 'Sentimental Value',       is_winner: false },
       { id: nid('dir', 5), category_id: CAT.director, name: 'Ryan Coogler',           film_title: 'Sinners',                 is_winner: false },
     ],
@@ -82,7 +82,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
       { id: nid('acm', 1), category_id: CAT.actor, name: 'Timothée Chalamet',  film_title: 'Marty Supreme',            is_winner: false },
       { id: nid('acm', 2), category_id: CAT.actor, name: 'Leonardo DiCaprio',  film_title: 'One Battle after Another', is_winner: false },
       { id: nid('acm', 3), category_id: CAT.actor, name: 'Ethan Hawke',        film_title: 'Blue Moon',                is_winner: false },
-      { id: nid('acm', 4), category_id: CAT.actor, name: 'Michael B. Jordan',  film_title: 'Sinners',                  is_winner: false },
+      { id: nid('acm', 4), category_id: CAT.actor, name: 'Michael B. Jordan',  film_title: 'Sinners',                  is_winner: true  },
       { id: nid('acm', 5), category_id: CAT.actor, name: 'Wagner Moura',       film_title: 'The Secret Agent',         is_winner: false },
     ],
   },
@@ -93,7 +93,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
       { id: nid('sm', 1), category_id: CAT.supactor, name: 'Benicio Del Toro',   film_title: 'One Battle after Another', is_winner: false },
       { id: nid('sm', 2), category_id: CAT.supactor, name: 'Jacob Elordi',       film_title: 'Frankenstein',             is_winner: false },
       { id: nid('sm', 3), category_id: CAT.supactor, name: 'Delroy Lindo',       film_title: 'Sinners',                  is_winner: false },
-      { id: nid('sm', 4), category_id: CAT.supactor, name: 'Sean Penn',          film_title: 'One Battle after Another', is_winner: false },
+      { id: nid('sm', 4), category_id: CAT.supactor, name: 'Sean Penn',          film_title: 'One Battle after Another', is_winner: true  },
       { id: nid('sm', 5), category_id: CAT.supactor, name: 'Stellan Skarsgård', film_title: 'Sentimental Value',        is_winner: false },
     ],
   },
@@ -101,7 +101,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     id: CAT.actress, year_id: Y, name: 'Actress in a Leading Role', name_tr: 'En İyi Kadın Oyuncu',
     group: 'acting', order_index: 5,
     nominees: [
-      { id: nid('act', 1), category_id: CAT.actress, name: 'Jessie Buckley',    film_title: 'Hamnet',                  is_winner: false },
+      { id: nid('act', 1), category_id: CAT.actress, name: 'Jessie Buckley',    film_title: 'Hamnet',                  is_winner: true  },
       { id: nid('act', 2), category_id: CAT.actress, name: 'Rose Byrne',        film_title: 'If I Had Legs I\'d Kick You', is_winner: false },
       { id: nid('act', 3), category_id: CAT.actress, name: 'Kate Hudson',       film_title: 'Song Sung Blue',          is_winner: false },
       { id: nid('act', 4), category_id: CAT.actress, name: 'Renate Reinsve',    film_title: 'Sentimental Value',       is_winner: false },
@@ -114,7 +114,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     nominees: [
       { id: nid('sa', 1), category_id: CAT.supactress, name: 'Elle Fanning',             film_title: 'Sentimental Value',        is_winner: false },
       { id: nid('sa', 2), category_id: CAT.supactress, name: 'Inga Ibsdotter Lilleaas', film_title: 'Sentimental Value',        is_winner: false },
-      { id: nid('sa', 3), category_id: CAT.supactress, name: 'Amy Madigan',              film_title: 'Weapons',                  is_winner: false },
+      { id: nid('sa', 3), category_id: CAT.supactress, name: 'Amy Madigan',              film_title: 'Weapons',                  is_winner: true  },
       { id: nid('sa', 4), category_id: CAT.supactress, name: 'Wunmi Mosaku',             film_title: 'Sinners',                  is_winner: false },
       { id: nid('sa', 5), category_id: CAT.supactress, name: 'Teyana Taylor',            film_title: 'One Battle after Another', is_winner: false },
     ],
@@ -125,7 +125,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     nominees: [
       { id: nid('cas', 1), category_id: CAT.casting, name: 'Nina Gold',              film_title: 'Hamnet',                  is_winner: false },
       { id: nid('cas', 2), category_id: CAT.casting, name: 'Jennifer Venditti',      film_title: 'Marty Supreme',           is_winner: false },
-      { id: nid('cas', 3), category_id: CAT.casting, name: 'Cassandra Kulukundis',   film_title: 'One Battle after Another', is_winner: false },
+      { id: nid('cas', 3), category_id: CAT.casting, name: 'Cassandra Kulukundis',   film_title: 'One Battle after Another', is_winner: true  },
       { id: nid('cas', 4), category_id: CAT.casting, name: 'Gabriel Domingues',      film_title: 'The Secret Agent',        is_winner: false },
       { id: nid('cas', 5), category_id: CAT.casting, name: 'Francine Maisler',       film_title: 'Sinners',                 is_winner: false },
     ],
@@ -138,7 +138,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     nominees: [
       { id: nid('ani', 1), category_id: CAT.animated, name: 'Arco',                                    film_title: null, is_winner: false },
       { id: nid('ani', 2), category_id: CAT.animated, name: 'Elio',                                    film_title: null, is_winner: false },
-      { id: nid('ani', 3), category_id: CAT.animated, name: 'KPop Demon Hunters',                      film_title: null, is_winner: false },
+      { id: nid('ani', 3), category_id: CAT.animated, name: 'KPop Demon Hunters',                      film_title: null, is_winner: true  },
       { id: nid('ani', 4), category_id: CAT.animated, name: 'Little Amélie or the Character of Rain', film_title: null, is_winner: false },
       { id: nid('ani', 5), category_id: CAT.animated, name: 'Zootopia 2',                              film_title: null, is_winner: false },
     ],
@@ -150,7 +150,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
       { id: nid('doc', 1), category_id: CAT.docfeat, name: 'The Alabama Solution',              film_title: null, is_winner: false },
       { id: nid('doc', 2), category_id: CAT.docfeat, name: 'Come See Me in the Good Light',     film_title: null, is_winner: false },
       { id: nid('doc', 3), category_id: CAT.docfeat, name: 'Cutting through Rocks',             film_title: null, is_winner: false },
-      { id: nid('doc', 4), category_id: CAT.docfeat, name: 'Mr. Nobody against Putin',          film_title: null, is_winner: false },
+      { id: nid('doc', 4), category_id: CAT.docfeat, name: 'Mr. Nobody against Putin',          film_title: null, is_winner: true  },
       { id: nid('doc', 5), category_id: CAT.docfeat, name: 'The Perfect Neighbor',              film_title: null, is_winner: false },
     ],
   },
@@ -160,7 +160,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     nominees: [
       { id: nid('intl', 1), category_id: CAT.intl, name: 'Brazil',   film_title: 'The Secret Agent',         is_winner: false },
       { id: nid('intl', 2), category_id: CAT.intl, name: 'France',   film_title: 'It Was Just an Accident',  is_winner: false },
-      { id: nid('intl', 3), category_id: CAT.intl, name: 'Norway',   film_title: 'Sentimental Value',        is_winner: false },
+      { id: nid('intl', 3), category_id: CAT.intl, name: 'Norway',   film_title: 'Sentimental Value',        is_winner: true  },
       { id: nid('intl', 4), category_id: CAT.intl, name: 'Spain',    film_title: 'Sirāt',                    is_winner: false },
       { id: nid('intl', 5), category_id: CAT.intl, name: 'Tunisia',  film_title: 'The Voice of Hind Rajab',  is_winner: false },
     ],
@@ -174,7 +174,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
       { id: nid('as', 1), category_id: CAT.adaptscr, name: 'Bugonia',                  film_title: 'Will Tracy',                        is_winner: false },
       { id: nid('as', 2), category_id: CAT.adaptscr, name: 'Frankenstein',             film_title: 'Guillermo del Toro',                is_winner: false },
       { id: nid('as', 3), category_id: CAT.adaptscr, name: 'Hamnet',                   film_title: 'Chloé Zhao & Maggie O\'Farrell',    is_winner: false },
-      { id: nid('as', 4), category_id: CAT.adaptscr, name: 'One Battle after Another', film_title: 'Paul Thomas Anderson',              is_winner: false },
+      { id: nid('as', 4), category_id: CAT.adaptscr, name: 'One Battle after Another', film_title: 'Paul Thomas Anderson',              is_winner: true  },
       { id: nid('as', 5), category_id: CAT.adaptscr, name: 'Train Dreams',             film_title: 'Clint Bentley & Greg Kwedar',       is_winner: false },
     ],
   },
@@ -186,7 +186,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
       { id: nid('os', 2), category_id: CAT.origscr, name: 'It Was Just an Accident', film_title: 'Jafar Panahi',                  is_winner: false },
       { id: nid('os', 3), category_id: CAT.origscr, name: 'Marty Supreme',       film_title: 'Ronald Bronstein & Josh Safdie',    is_winner: false },
       { id: nid('os', 4), category_id: CAT.origscr, name: 'Sentimental Value',   film_title: 'Eskil Vogt, Joachim Trier',         is_winner: false },
-      { id: nid('os', 5), category_id: CAT.origscr, name: 'Sinners',             film_title: 'Ryan Coogler',                      is_winner: false },
+      { id: nid('os', 5), category_id: CAT.origscr, name: 'Sinners',             film_title: 'Ryan Coogler',                      is_winner: true  },
     ],
   },
 
@@ -198,7 +198,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
       { id: nid('ci', 1), category_id: CAT.cinemato, name: 'Dan Laustsen',              film_title: 'Frankenstein',             is_winner: false },
       { id: nid('ci', 2), category_id: CAT.cinemato, name: 'Darius Khondji',            film_title: 'Marty Supreme',            is_winner: false },
       { id: nid('ci', 3), category_id: CAT.cinemato, name: 'Michael Bauman',            film_title: 'One Battle after Another', is_winner: false },
-      { id: nid('ci', 4), category_id: CAT.cinemato, name: 'Autumn Durald Arkapaw',     film_title: 'Sinners',                  is_winner: false },
+      { id: nid('ci', 4), category_id: CAT.cinemato, name: 'Autumn Durald Arkapaw',     film_title: 'Sinners',                  is_winner: true  },
       { id: nid('ci', 5), category_id: CAT.cinemato, name: 'Adolpho Veloso',            film_title: 'Train Dreams',             is_winner: false },
     ],
   },
@@ -208,7 +208,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     nominees: [
       { id: nid('ed', 1), category_id: CAT.editing, name: 'Stephen Mirrione',                film_title: 'F1',                       is_winner: false },
       { id: nid('ed', 2), category_id: CAT.editing, name: 'Ronald Bronstein & Josh Safdie',  film_title: 'Marty Supreme',            is_winner: false },
-      { id: nid('ed', 3), category_id: CAT.editing, name: 'Andy Jurgensen',                  film_title: 'One Battle after Another', is_winner: false },
+      { id: nid('ed', 3), category_id: CAT.editing, name: 'Andy Jurgensen',                  film_title: 'One Battle after Another', is_winner: true  },
       { id: nid('ed', 4), category_id: CAT.editing, name: 'Olivier Bugge Coutté',            film_title: 'Sentimental Value',        is_winner: false },
       { id: nid('ed', 5), category_id: CAT.editing, name: 'Michael P. Shawver',              film_title: 'Sinners',                  is_winner: false },
     ],
@@ -221,14 +221,14 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
       { id: nid('sc', 2), category_id: CAT.score, name: 'Alexandre Desplat',  film_title: 'Frankenstein',             is_winner: false },
       { id: nid('sc', 3), category_id: CAT.score, name: 'Max Richter',        film_title: 'Hamnet',                   is_winner: false },
       { id: nid('sc', 4), category_id: CAT.score, name: 'Jonny Greenwood',    film_title: 'One Battle after Another', is_winner: false },
-      { id: nid('sc', 5), category_id: CAT.score, name: 'Ludwig Goransson',   film_title: 'Sinners',                  is_winner: false },
+      { id: nid('sc', 5), category_id: CAT.score, name: 'Ludwig Goransson',   film_title: 'Sinners',                  is_winner: true  },
     ],
   },
   {
     id: CAT.sound, year_id: Y, name: 'Sound', name_tr: 'Ses',
     group: 'craft_sound', order_index: 16,
     nominees: [
-      { id: nid('so', 1), category_id: CAT.sound, name: 'F1',                       film_title: null, is_winner: false },
+      { id: nid('so', 1), category_id: CAT.sound, name: 'F1',                       film_title: null, is_winner: true  },
       { id: nid('so', 2), category_id: CAT.sound, name: 'Frankenstein',             film_title: null, is_winner: false },
       { id: nid('so', 3), category_id: CAT.sound, name: 'One Battle after Another', film_title: null, is_winner: false },
       { id: nid('so', 4), category_id: CAT.sound, name: 'Sinners',                  film_title: null, is_winner: false },
@@ -240,7 +240,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     group: 'craft_sound', order_index: 17,
     nominees: [
       { id: nid('oso', 1), category_id: CAT.origsong, name: 'Dear Me',           film_title: 'Diane Warren: Relentless', is_winner: false },
-      { id: nid('oso', 2), category_id: CAT.origsong, name: 'Golden',            film_title: 'KPop Demon Hunters',       is_winner: false },
+      { id: nid('oso', 2), category_id: CAT.origsong, name: 'Golden',            film_title: 'KPop Demon Hunters',       is_winner: true  },
       { id: nid('oso', 3), category_id: CAT.origsong, name: 'I Lied To You',     film_title: 'Sinners',                  is_winner: false },
       { id: nid('oso', 4), category_id: CAT.origsong, name: 'Sweet Dreams Of Joy', film_title: 'Viva Verdi!',            is_winner: false },
       { id: nid('oso', 5), category_id: CAT.origsong, name: 'Train Dreams',      film_title: 'Train Dreams',             is_winner: false },
@@ -250,7 +250,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     id: CAT.vfx, year_id: Y, name: 'Visual Effects', name_tr: 'Görsel Efektler',
     group: 'craft_sound', order_index: 18,
     nominees: [
-      { id: nid('vf', 1), category_id: CAT.vfx, name: 'Avatar: Fire and Ash',        film_title: null, is_winner: false },
+      { id: nid('vf', 1), category_id: CAT.vfx, name: 'Avatar: Fire and Ash',        film_title: null, is_winner: true  },
       { id: nid('vf', 2), category_id: CAT.vfx, name: 'F1',                           film_title: null, is_winner: false },
       { id: nid('vf', 3), category_id: CAT.vfx, name: 'Jurassic World Rebirth',       film_title: null, is_winner: false },
       { id: nid('vf', 4), category_id: CAT.vfx, name: 'The Lost Bus',                 film_title: null, is_winner: false },
@@ -261,7 +261,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     id: CAT.proddesign, year_id: Y, name: 'Production Design', name_tr: 'Prodüksiyon Tasarımı',
     group: 'craft_sound', order_index: 19,
     nominees: [
-      { id: nid('pd', 1), category_id: CAT.proddesign, name: 'Frankenstein',             film_title: null, is_winner: false },
+      { id: nid('pd', 1), category_id: CAT.proddesign, name: 'Frankenstein',             film_title: null, is_winner: true  },
       { id: nid('pd', 2), category_id: CAT.proddesign, name: 'Hamnet',                   film_title: null, is_winner: false },
       { id: nid('pd', 3), category_id: CAT.proddesign, name: 'Marty Supreme',            film_title: null, is_winner: false },
       { id: nid('pd', 4), category_id: CAT.proddesign, name: 'One Battle after Another', film_title: null, is_winner: false },
@@ -273,7 +273,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     group: 'craft_sound', order_index: 20,
     nominees: [
       { id: nid('co', 1), category_id: CAT.costume, name: 'Deborah L. Scott',    film_title: 'Avatar: Fire and Ash', is_winner: false },
-      { id: nid('co', 2), category_id: CAT.costume, name: 'Kate Hawley',         film_title: 'Frankenstein',         is_winner: false },
+      { id: nid('co', 2), category_id: CAT.costume, name: 'Kate Hawley',         film_title: 'Frankenstein',         is_winner: true  },
       { id: nid('co', 3), category_id: CAT.costume, name: 'Malgosia Turzanska',  film_title: 'Hamnet',               is_winner: false },
       { id: nid('co', 4), category_id: CAT.costume, name: 'Miyako Bellizzi',     film_title: 'Marty Supreme',        is_winner: false },
       { id: nid('co', 5), category_id: CAT.costume, name: 'Ruth E. Carter',      film_title: 'Sinners',              is_winner: false },
@@ -283,7 +283,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     id: CAT.makeup, year_id: Y, name: 'Makeup and Hairstyling', name_tr: 'Makyaj & Saç Tasarımı',
     group: 'craft_sound', order_index: 21,
     nominees: [
-      { id: nid('mh', 1), category_id: CAT.makeup, name: 'Frankenstein',         film_title: null, is_winner: false },
+      { id: nid('mh', 1), category_id: CAT.makeup, name: 'Frankenstein',         film_title: null, is_winner: true  },
       { id: nid('mh', 2), category_id: CAT.makeup, name: 'Kokuho',               film_title: null, is_winner: false },
       { id: nid('mh', 3), category_id: CAT.makeup, name: 'Sinners',              film_title: null, is_winner: false },
       { id: nid('mh', 4), category_id: CAT.makeup, name: 'The Smashing Machine', film_title: null, is_winner: false },
@@ -298,7 +298,7 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
     nominees: [
       { id: nid('ash', 1), category_id: CAT.animshort, name: 'Butterfly',                        film_title: null, is_winner: false },
       { id: nid('ash', 2), category_id: CAT.animshort, name: 'Forevergreen',                     film_title: null, is_winner: false },
-      { id: nid('ash', 3), category_id: CAT.animshort, name: 'The Girl Who Cried Pearls',        film_title: null, is_winner: false },
+      { id: nid('ash', 3), category_id: CAT.animshort, name: 'The Girl Who Cried Pearls',        film_title: null, is_winner: true  },
       { id: nid('ash', 4), category_id: CAT.animshort, name: 'Retirement Plan',                  film_title: null, is_winner: false },
       { id: nid('ash', 5), category_id: CAT.animshort, name: 'The Three Sisters',                film_title: null, is_winner: false },
     ],
@@ -310,15 +310,15 @@ export const MOCK_CATEGORIES_WITH_NOMINEES = [
       { id: nid('ls', 1), category_id: CAT.liveaction, name: "Butcher's Stain",                      film_title: null, is_winner: false },
       { id: nid('ls', 2), category_id: CAT.liveaction, name: 'A Friend of Dorothy',                  film_title: null, is_winner: false },
       { id: nid('ls', 3), category_id: CAT.liveaction, name: "Jane Austen's Period Drama",           film_title: null, is_winner: false },
-      { id: nid('ls', 4), category_id: CAT.liveaction, name: 'The Singers',                          film_title: null, is_winner: false },
-      { id: nid('ls', 5), category_id: CAT.liveaction, name: 'Two People Exchanging Saliva',         film_title: null, is_winner: false },
+      { id: nid('ls', 4), category_id: CAT.liveaction, name: 'The Singers',                          film_title: null, is_winner: true  },
+      { id: nid('ls', 5), category_id: CAT.liveaction, name: 'Two People Exchanging Saliva',         film_title: null, is_winner: true  },
     ],
   },
   {
     id: CAT.docshort, year_id: Y, name: 'Documentary Short Film', name_tr: 'En İyi Belgesel Kısa Film',
     group: 'shorts', order_index: 24,
     nominees: [
-      { id: nid('ds', 1), category_id: CAT.docshort, name: 'All the Empty Rooms',                                     film_title: null, is_winner: false },
+      { id: nid('ds', 1), category_id: CAT.docshort, name: 'All the Empty Rooms',                                     film_title: null, is_winner: true  },
       { id: nid('ds', 2), category_id: CAT.docshort, name: 'Armed Only with a Camera: The Life and Death of Brent Renaud', film_title: null, is_winner: false },
       { id: nid('ds', 3), category_id: CAT.docshort, name: 'Children No More: "Were and Are Gone"',                  film_title: null, is_winner: false },
       { id: nid('ds', 4), category_id: CAT.docshort, name: 'The Devil Is Busy',                                       film_title: null, is_winner: false },
