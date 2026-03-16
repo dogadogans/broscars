@@ -81,6 +81,21 @@ function GroupWall({
     entry.nomineeMap.get(nid)!.users.push(p.user)
   }
 
+  // Inject winner nominees that nobody picked so they still appear highlighted
+  for (const cat of nominees) {
+    for (const n of cat.nominees) {
+      if (!n.is_winner) continue
+      if (!byCat.has(cat.id)) {
+        const order = nominees.findIndex((c) => c.id === cat.id)
+        byCat.set(cat.id, { category: { id: cat.id, name: cat.name, name_tr: cat.name_tr }, order, nomineeMap: new Map() })
+      }
+      const entry = byCat.get(cat.id)!
+      if (!entry.nomineeMap.has(n.id)) {
+        entry.nomineeMap.set(n.id, { nominee: { id: n.id, name: n.name, film_title: n.film_title ?? null }, users: [] })
+      }
+    }
+  }
+
   const sorted = [...byCat.values()].sort((a, b) => a.order - b.order)
 
   if (sorted.length === 0) {

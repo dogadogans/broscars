@@ -70,7 +70,10 @@ export default function JoinPage() {
       if (json.data.nameTaken) {
         router.push(`/${year}/wall`)
       } else {
-        router.push(`/${year}/vote`)
+        const stateRes = await fetch(`/api/${year}/state`, { cache: 'no-store' })
+        const stateJson = await stateRes.json()
+        const gameState = stateJson.data?.state ?? 'voting'
+        router.push(gameState === 'voting' ? `/${year}/vote` : `/${year}/wall`)
       }
     } catch {
       setError(t('errors.genericError'))
