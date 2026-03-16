@@ -50,14 +50,27 @@ export async function POST(
     const body = await req.json()
     const categories: CategoryInput[] = body.categories ?? []
 
-    // Upsert year
-    const { data: yearRecord, error: yearError } = await supabase
+    // Get or create year (never overwrite existing state)
+    let yearRecord: { id: string; year: number; state: string } | null = null
+    const { data: existingYear } = await supabase
       .from('years')
-      .upsert({ year, state: 'voting' }, { onConflict: 'year' })
-      .select()
+      .select('id, year, state')
+      .eq('year', year)
       .single()
 
-    if (yearError || !yearRecord) throw yearError ?? new Error('Failed to upsert year')
+    if (existingYear) {
+      yearRecord = existingYear
+    } else {
+      const { data: newYear, error: newYearError } = await supabase
+        .from('years')
+        .insert({ year, state: 'voting' })
+        .select()
+        .single()
+      if (newYearError || !newYear) throw newYearError ?? new Error('Failed to create year')
+      yearRecord = newYear
+    }
+
+    if (!yearRecord) throw new Error('Failed to get or create year')
 
     for (const cat of categories) {
       // Upsert category
