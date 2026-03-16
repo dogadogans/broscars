@@ -3,6 +3,8 @@ import { supabase } from '@/lib/supabase/server'
 import { isMock, MOCK_YEARS } from '@/lib/mock'
 import type { ApiResponse, Year } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/years
 // Returns all years ordered descending (newest first).
 
