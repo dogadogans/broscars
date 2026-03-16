@@ -91,17 +91,16 @@ export async function POST(
 
       if (catError || !catRecord) throw catError ?? new Error('Failed to upsert category')
 
-      // Insert nominees
+      // Insert nominees — never overwrite is_winner on conflict
       const nomineeRows = cat.nominees.map((n) => ({
         category_id: catRecord.id,
         name: n.name,
         film_title: n.film_title ?? null,
-        is_winner: false,
       }))
 
       const { error: nomError } = await supabase
         .from('nominees')
-        .upsert(nomineeRows, { onConflict: 'category_id,name' })
+        .upsert(nomineeRows, { onConflict: 'category_id,name', ignoreDuplicates: true })
 
       if (nomError) throw nomError
     }
