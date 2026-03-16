@@ -23,7 +23,7 @@ export function useGameState(year: number): UseGameStateResult {
 
     async function fetchState() {
       try {
-        const res = await fetch(`/api/${year}/state`)
+        const res = await fetch(`/api/${year}/state`, { cache: 'no-store' })
         if (!res.ok) throw new Error('Failed to fetch game state')
         const json = await res.json()
         if (!cancelled) setState(json.data?.state ?? null)
