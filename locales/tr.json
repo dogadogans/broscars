@@ -6,12 +6,22 @@
   },
   "home": {
     "title": "Broscar",
-    "subtitle": "Sen ve arkadaşların için Oscar tahminleri",
+    "subtitle": "Oscar köyüne hoş geldiniz!",
     "currentYear": "{{year}} Oscars",
     "pastYears": "Geçmiş Yıllar",
     "joinCta": "Tahminlerini yap",
     "viewResults": "Sonuçları gör",
-    "viewLeaderboard": "Sıralamayı gör"
+    "viewLeaderboard": "Sıralamayı gör",
+    "votingOpen": "Oylar açık",
+    "votingClosed": "Oylar kapalı",
+    "participantCount": "{{count}} kişi katıldı",
+    "loginPrompt": "Hesaba giriş yap",
+    "join": "Katıl",
+    "startVoting": "Cevaplamaya başla",
+    "progress": "{{current}}/{{total}} cevaplandı",
+    "continue": "Devam et",
+    "viewMyPicks": "Seçimlerimi Gör",
+    "ended": "Oscars {{year}} sona erdi"
   },
   "join": {
     "heading": "Katıl",
@@ -47,7 +57,11 @@
     "byCategory": "Kategoriye Göre",
     "empty": "Henüz tahmin yok. İlk sen ol!",
     "submitted": "Gönderildi",
-    "notSubmitted": "Devam ediyor"
+    "notSubmitted": "Devam ediyor",
+    "wallSubtitle": "Her yıl kimin ne seçtiğini gör",
+    "leaderboardSubtitle": "Kimin best Broscars olduğunu gör",
+    "resultsAfterCeremony": "Sonuçlar tören sonrasında açıklanacak.",
+    "winner": "KAZANAN"
   },
   "results": {
     "heading": "Sonuçlar",
@@ -107,6 +121,8 @@
   },
   "errors": {
     "nameRequired": "Ad gerekli.",
+    "pinRequired": "PIN gerekli.",
+    "wrongPin": "Yanlış PIN. Tekrar dene.",
     "nameTaken": "Bu ad bu yıl zaten alınmış.",
     "genericError": "Bir şeyler ters gitti. Lütfen tekrar dene.",
     "notFound": "Bulunamadı.",
@@ -127,5 +143,20 @@
     "back": "Geri",
     "yes": "Evet",
     "no": "Hayır"
+  },
+  "account": {
+    "myStats": "İstatistiklerim",
+    "myPicks": "Seçimlerim",
+    "answered": "Cevaplanan",
+    "continueVoting": "Devam Et",
+    "totalScore": "Toplam Puan",
+    "rank": "Sıralama",
+    "seasonsJoined": "Katıldığı Sezon",
+    "accuracy": "Doğruluk Oranı",
+    "noPicks": "Henüz seçim yapılmadı.",
+    "votingOpen": "Oylama açık",
+    "winner": "KAZANAN",
+    "language": "Dil",
+    "logout": "Çıkış yap"
   }
 }

@@ -7,6 +7,7 @@ import Avatar from '@/components/ui/Avatar'
 import Button from '@/components/ui/Button'
 import { getAvatarColor } from '@/lib/utils/avatar'
 import { useDeviceToken } from '@/hooks/useDeviceToken'
+import { useTranslation } from '@/hooks/useTranslation'
 import type { Year } from '@/types'
 
 const ICON_RING = '0 0 0 1px rgba(152,150,150,0.50), 0 1px 2px rgba(44,41,41,0.08)'
@@ -16,6 +17,7 @@ const TOKEN_KEY = 'broscar_token'
 
 export default function HomePage() {
   const { token } = useDeviceToken()
+  const { t } = useTranslation()
 
   const [currentYear, setCurrentYear] = useState<Year | null>(null)
   const [participantCount, setParticipantCount] = useState(0)
@@ -79,11 +81,11 @@ export default function HomePage() {
     const trimmed = joinName.trim()
 
     if (!trimmed) {
-      setJoinError('Görünen ad gerekli.')
+      setJoinError(t('errors.nameRequired'))
       return
     }
     if (!joinPin) {
-      setJoinError('PIN gerekli.')
+      setJoinError(t('errors.pinRequired'))
       return
     }
     if (!token) return
@@ -105,12 +107,12 @@ export default function HomePage() {
       const json = await res.json()
 
       if (res.status === 401) {
-        setJoinError('Yanlış PIN. Tekrar dene.')
+        setJoinError(t('errors.wrongPin'))
         return
       }
 
       if (!res.ok || json.error) {
-        setJoinError('Bir şeyler ters gitti. Lütfen tekrar dene.')
+        setJoinError(t('errors.genericError'))
         return
       }
 
@@ -119,7 +121,7 @@ export default function HomePage() {
       window.dispatchEvent(new Event('broscar:auth'))
       window.location.href = `/${currentYear?.year}/vote`
     } catch {
-      setJoinError('Bir şeyler ters gitti. Lütfen tekrar dene.')
+      setJoinError(t('errors.genericError'))
     } finally {
       setJoinLoading(false)
     }
@@ -189,7 +191,7 @@ export default function HomePage() {
             className="font-sans text-base"
             style={{ color: 'var(--color-text-muted)' }}
           >
-            Oscar 2026 köyüne hoş geldiniz!
+            {t('home.subtitle')}
           </div>
         </div>
       </div>
@@ -225,7 +227,7 @@ export default function HomePage() {
                   className="font-sans text-base font-medium"
                   style={{ color: 'var(--color-text)' }}
                 >
-                  {votingOpen ? 'Oylar açık' : 'Oylar kapalı'}
+                  {votingOpen ? t('home.votingOpen') : t('home.votingClosed')}
                 </span>
               </div>
             </div>
@@ -233,7 +235,7 @@ export default function HomePage() {
               className="font-sans text-xs"
               style={{ color: 'var(--color-text-muted)' }}
             >
-              {participantCount} kişi katıldı
+              {t('home.participantCount', { count: participantCount })}
             </div>
           </div>
 
@@ -242,7 +244,7 @@ export default function HomePage() {
             className="px-5 py-5"
             style={{ borderTop: '1px solid var(--color-border)' }}
           >
-            {/* Not logged in → Join in */}
+            {/* Not logged in → Join */}
             {viewState === 'not-joined' && (
               <div className="flex items-center justify-between">
                 <button
@@ -259,11 +261,11 @@ export default function HomePage() {
                     className="font-sans text-sm"
                     style={{ color: 'var(--color-text-muted)' }}
                   >
-                    Hesaba giriş yap
+                    {t('home.loginPrompt')}
                   </span>
                 </button>
                 <Button variant="outline" onClick={() => setJoining(true)}>
-                  Katıl
+                  {t('home.join')}
                 </Button>
               </div>
             )}
@@ -286,7 +288,7 @@ export default function HomePage() {
                       className="block font-sans text-sm font-semibold leading-4"
                       style={{ color: 'var(--color-grey-3)' }}
                     >
-                      Görünen Ad
+                      {t('join.nameLabel')}
                     </label>
                     <input
                       ref={nameInputRef}
@@ -355,7 +357,7 @@ export default function HomePage() {
                   className="w-full"
                   disabled={joinLoading}
                 >
-                  {joinLoading ? 'Yükleniyor…' : 'Cevaplamaya başla'}
+                  {joinLoading ? t('common.loading') : t('home.startVoting')}
                 </Button>
               </form>
             )}
@@ -380,12 +382,12 @@ export default function HomePage() {
                       className="font-sans text-xs"
                       style={{ color: 'var(--color-text-muted)', fontVariantNumeric: 'tabular-nums' }}
                     >
-                      {displayedPickCount}/{totalCategories} cevaplandı
+                      {t('home.progress', { current: displayedPickCount, total: totalCategories })}
                     </div>
                   </div>
                 </div>
                 <Button variant="primary" href={`/${year}/vote`}>
-                  Devam et
+                  {t('home.continue')}
                 </Button>
               </div>
             )}
@@ -410,12 +412,12 @@ export default function HomePage() {
                       className="font-sans text-xs"
                       style={{ color: 'var(--color-text-muted)', fontVariantNumeric: 'tabular-nums' }}
                     >
-                      {totalCategories}/{totalCategories} cevaplandı
+                      {t('home.progress', { current: totalCategories, total: totalCategories })}
                     </div>
                   </div>
                 </div>
                 <Button variant="outline" href={`/${year}/account?tab=picks`}>
-                  Seçimlerimi Gör
+                  {t('home.viewMyPicks')}
                 </Button>
               </div>
             )}
@@ -428,17 +430,17 @@ export default function HomePage() {
                     className="font-sans text-base font-medium"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Sıralama
+                    {t('results.leaderboard')}
                   </div>
                   <div
                     className="font-sans text-xs"
                     style={{ color: 'var(--color-text-muted)' }}
                   >
-                    Oscars {year} sona erdi
+                    {t('home.ended', { year: String(year) })}
                   </div>
                 </div>
                 <Button variant="outline" href={`/${year}/wall?tab=leaderboard`}>
-                  Sonuçları Gör
+                  {t('home.viewResults')}
                 </Button>
               </div>
             )}

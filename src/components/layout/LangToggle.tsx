@@ -6,24 +6,29 @@ export default function LangToggle() {
   const { locale, setLocale } = useLang()
 
   return (
-    <div className="flex items-center gap-1 rounded-lg border border-white/20 p-1 text-sm">
+    <div
+      className="flex items-center gap-1 rounded-lg p-1 text-sm"
+      style={{ boxShadow: '0 0 0 1px rgba(173,173,173,0.50)' }}
+    >
       <button
         onClick={() => setLocale('en')}
-        className={`rounded px-2 py-1 font-medium transition-colors ${
+        className="rounded px-2 py-1 font-medium transition-colors"
+        style={
           locale === 'en'
-            ? 'bg-gold-500 text-black'
-            : 'text-white/60 hover:text-white'
-        }`}
+            ? { background: 'var(--color-warning-600)', color: '#fff' }
+            : { color: 'var(--color-grey-3)' }
+        }
       >
         EN
       </button>
       <button
         onClick={() => setLocale('tr')}
-        className={`rounded px-2 py-1 font-medium transition-colors ${
+        className="rounded px-2 py-1 font-medium transition-colors"
+        style={
           locale === 'tr'
-            ? 'bg-gold-500 text-black'
-            : 'text-white/60 hover:text-white'
-        }`}
+            ? { background: 'var(--color-warning-600)', color: '#fff' }
+            : { color: 'var(--color-grey-3)' }
+        }
       >
         TR
       </button>

@@ -20,7 +20,11 @@ export function LangProvider({ children }: { children: React.ReactNode }) {
     const stored = localStorage.getItem('broscar_locale') as Locale | null
     if (stored === 'en' || stored === 'tr') {
       setLocaleState(stored)
+      return
     }
+    // No stored preference — use browser language
+    const browserLocale: Locale = navigator.language.startsWith('tr') ? 'tr' : 'en'
+    setLocaleState(browserLocale)
   }, [])
 
   function setLocale(next: Locale) {

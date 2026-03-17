@@ -6,12 +6,22 @@
   },
   "home": {
     "title": "Broscar",
-    "subtitle": "Oscar predictions for you and your people",
+    "subtitle": "Welcome to the Oscars contest!",
     "currentYear": "{{year}} Oscars",
     "pastYears": "Past Years",
     "joinCta": "Make your picks",
     "viewResults": "View results",
-    "viewLeaderboard": "View leaderboard"
+    "viewLeaderboard": "View leaderboard",
+    "votingOpen": "Voting is open",
+    "votingClosed": "Voting is closed",
+    "participantCount": "{{count}} joined",
+    "loginPrompt": "Log in to your account",
+    "join": "Join",
+    "startVoting": "Start picking",
+    "progress": "{{current}}/{{total}} answered",
+    "continue": "Continue",
+    "viewMyPicks": "View my picks",
+    "ended": "Oscars {{year}} has ended"
   },
   "join": {
     "heading": "Join",
@@ -47,7 +57,11 @@
     "byCategory": "By Category",
     "empty": "No picks yet. Be the first!",
     "submitted": "Submitted",
-    "notSubmitted": "In progress"
+    "notSubmitted": "In progress",
+    "wallSubtitle": "See who picked what each year",
+    "leaderboardSubtitle": "See who's the best Broscars",
+    "resultsAfterCeremony": "Results will be revealed after the ceremony.",
+    "winner": "WINNER"
   },
   "results": {
     "heading": "Results",
@@ -107,6 +121,8 @@
   },
   "errors": {
     "nameRequired": "Name is required.",
+    "pinRequired": "PIN is required.",
+    "wrongPin": "Wrong PIN. Try again.",
     "nameTaken": "That name is already taken this year.",
     "genericError": "Something went wrong. Please try again.",
     "notFound": "Not found.",
@@ -127,5 +143,20 @@
     "back": "Back",
     "yes": "Yes",
     "no": "No"
+  },
+  "account": {
+    "myStats": "My Stats",
+    "myPicks": "My Picks",
+    "answered": "Answered",
+    "continueVoting": "Continue",
+    "totalScore": "Total Score",
+    "rank": "Rank",
+    "seasonsJoined": "Seasons Joined",
+    "accuracy": "Accuracy",
+    "noPicks": "No picks yet.",
+    "votingOpen": "Voting open",
+    "winner": "WINNER",
+    "language": "Language",
+    "logout": "Log out"
   }
 }

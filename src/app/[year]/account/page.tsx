@@ -7,6 +7,7 @@ import Avatar from '@/components/ui/Avatar'
 import Select from '@/components/ui/Select'
 import { getAvatarColor } from '@/lib/utils/avatar'
 import { useDeviceToken } from '@/hooks/useDeviceToken'
+import { useTranslation } from '@/hooks/useTranslation'
 import type { RankedScore, PickWithDetails, CategoryWithNominees, Year } from '@/types'
 
 const NAME_KEY  = 'broscar_display_name'
@@ -100,19 +101,20 @@ function StatsTab({
   seasonsJoined: number
   loading: boolean
 }) {
+  const { t } = useTranslation()
   const isVoting = yearState === 'voting'
 
   return (
     <>
       <SectionHeader
-        title="İstatistiklerim"
+        title={t('account.myStats')}
         selectedYear={selectedYear}
         yearOptions={yearOptions}
         onYearChange={onYearChange}
       />
 
       {loading ? (
-        <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>Yükleniyor...</p>
+        <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>{t('common.loading')}</p>
       ) : (
         <>
           {/* Voting progress card */}
@@ -132,7 +134,7 @@ function StatsTab({
                     aria-hidden
                   />
                   <span className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>
-                    Oylama açık
+                    {t('account.votingOpen')}
                   </span>
                 </div>
               </div>
@@ -145,7 +147,7 @@ function StatsTab({
                     {myPicksCount}/{totalCategories}
                   </p>
                   <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>
-                    Cevaplanan
+                    {t('account.answered')}
                   </p>
                 </div>
                 <a
@@ -153,7 +155,7 @@ function StatsTab({
                   className="flex h-10 items-center rounded-lg px-5 font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
                   style={{ background: 'var(--color-grey-5)' }}
                 >
-                  Devam Et
+                  {t('account.continueVoting')}
                 </a>
               </div>
             </div>
@@ -162,20 +164,20 @@ function StatsTab({
           {/* Stats grid */}
           <div className="grid grid-cols-2 gap-3">
             <StatCard
-              label="Toplam Puan"
+              label={t('account.totalScore')}
               value={myScore ? `${myScore.score}/${myScore.total_categories}` : `—/${totalCategories || '—'}`}
               accent
             />
             <StatCard
-              label="Sıralama"
+              label={t('account.rank')}
               value={myScore ? `#${myScore.rank}` : '—'}
             />
             <StatCard
-              label="Katıldığı Sezon"
+              label={t('account.seasonsJoined')}
               value={String(seasonsJoined || '—')}
             />
             <StatCard
-              label="Doğruluk Oranı"
+              label={t('account.accuracy')}
               value={myScore ? `${myScore.accuracy}%` : '—'}
             />
           </div>
@@ -204,23 +206,25 @@ function PicksTab({
   winnerMap: Map<string, boolean>
   loading: boolean
 }) {
+  const { t } = useTranslation()
+
   return (
     <>
       <SectionHeader
-        title="Seçimlerim"
+        title={t('account.myPicks')}
         selectedYear={selectedYear}
         yearOptions={yearOptions}
         onYearChange={onYearChange}
       />
 
       {loading ? (
-        <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>Yükleniyor...</p>
+        <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>{t('common.loading')}</p>
       ) : picks.length === 0 ? (
         <div
           className="rounded-lg px-4 py-10 text-center font-sans text-sm"
           style={{ color: 'var(--color-grey-3)', background: 'var(--color-surface)', boxShadow: CARD_SHADOW }}
         >
-          Henüz seçim yapılmadı.
+          {t('account.noPicks')}
         </div>
       ) : (
         <>
@@ -230,7 +234,7 @@ function PicksTab({
             style={{ background: 'var(--color-surface)', boxShadow: CARD_SHADOW }}
           >
             <div className="px-4 py-4" style={{ borderRight: '1px solid var(--color-border)' }}>
-              <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>Toplam Puan</p>
+              <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>{t('account.totalScore')}</p>
               <p className="mt-1 font-sans text-2xl font-bold">
                 {myScore ? (
                   <>
@@ -243,7 +247,7 @@ function PicksTab({
               </p>
             </div>
             <div className="px-4 py-4">
-              <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>Sıralama</p>
+              <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>{t('account.rank')}</p>
               <p
                 className="mt-1 font-sans text-2xl font-bold"
                 style={{ color: 'var(--color-text)' }}
@@ -276,12 +280,17 @@ function PicksTab({
                         {p.category.name}
                       </p>
                       <span className="font-sans text-xs font-bold tracking-wide" style={{ color: '#967811' }}>
-                        KAZANAN
+                        {t('account.winner')}
                       </span>
                     </div>
                     <p className="mt-0.5 font-sans text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                       {p.head_nominee.name}
                     </p>
+                    {p.head_nominee.film_title && (
+                      <p className="font-sans text-xs italic" style={{ color: 'var(--color-grey-3)' }}>
+                        {p.head_nominee.film_title}
+                      </p>
+                    )}
                     {p.heart_nominee && (
                       <div className="mt-1 flex items-center gap-1">
                         <Heart
@@ -292,6 +301,11 @@ function PicksTab({
                         <span className="font-sans text-sm" style={{ color: 'var(--color-danger-500)' }}>
                           {p.heart_nominee.name}
                         </span>
+                        {p.heart_nominee.film_title && (
+                          <span className="font-sans text-xs italic" style={{ color: 'var(--color-danger-400)' }}>
+                            — {p.heart_nominee.film_title}
+                          </span>
+                        )}
                       </div>
                     )}
                   </div>
@@ -309,6 +323,11 @@ function PicksTab({
                   <p className="mt-0.5 font-sans text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                     {p.head_nominee.name}
                   </p>
+                  {p.head_nominee.film_title && (
+                    <p className="font-sans text-xs italic" style={{ color: 'var(--color-grey-3)' }}>
+                      {p.head_nominee.film_title}
+                    </p>
+                  )}
                   {p.heart_nominee && (
                     <div className="mt-1 flex items-center gap-1">
                       <Heart
@@ -319,6 +338,11 @@ function PicksTab({
                       <span className="font-sans text-sm" style={{ color: 'var(--color-danger-500)' }}>
                         {p.heart_nominee.name}
                       </span>
+                      {p.heart_nominee.film_title && (
+                        <span className="font-sans text-xs italic" style={{ color: 'var(--color-danger-400)' }}>
+                          — {p.heart_nominee.film_title}
+                        </span>
+                      )}
                     </div>
                   )}
                 </div>
@@ -338,6 +362,7 @@ export default function AccountPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { token } = useDeviceToken()
+  const { t } = useTranslation()
 
   const [displayName, setDisplayName]       = useState<string | null>(null)
   const [avatarColor, setAvatarColor]       = useState<string | null>(null)
@@ -461,7 +486,7 @@ export default function AccountPage() {
         </div>
         <button
           onClick={handleLogout}
-          aria-label="Çıkış yap"
+          aria-label={t('account.logout')}
           className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors"
           style={{
             background: logoutHovered ? 'var(--color-bg)' : 'var(--color-surface)',
@@ -481,19 +506,19 @@ export default function AccountPage() {
         className="mb-6 flex h-9 w-full overflow-hidden rounded-lg"
         style={{ boxShadow: '0 0 0 1px rgba(173,173,173,0.50)' }}
       >
-        {(['stats', 'picks'] as Tab[]).map((t, i) => (
+        {(['stats', 'picks'] as Tab[]).map((tabKey, i) => (
           <button
-            key={t}
-            onClick={() => setTab(t)}
+            key={tabKey}
+            onClick={() => setTab(tabKey)}
             className="flex flex-1 items-center justify-center px-3 font-sans text-base transition-colors"
             style={{
-              background: tab === t ? 'var(--grey-05)' : 'var(--color-surface)',
+              background: tab === tabKey ? 'var(--grey-05)' : 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontWeight: tab === t ? 500 : 400,
+              fontWeight: tab === tabKey ? 500 : 400,
               borderRight: i === 0 ? '1px solid rgba(173,173,173,0.50)' : undefined,
             }}
           >
-            {t === 'stats' ? 'İstatistiklerim' : 'Seçimlerim'}
+            {tabKey === 'stats' ? t('account.myStats') : t('account.myPicks')}
           </button>
         ))}
       </div>

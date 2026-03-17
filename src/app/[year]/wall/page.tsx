@@ -54,6 +54,8 @@ function GroupWall({
   nominees: CategoryWithNominees[]
   locale: string
 }) {
+  const { t } = useTranslation()
+
   const winnerMap = new Map<string, boolean>()
   for (const cat of nominees) {
     for (const n of cat.nominees) winnerMap.set(n.id, n.is_winner)
@@ -104,7 +106,7 @@ function GroupWall({
         className="rounded-lg px-4 py-10 text-center font-sans text-sm"
         style={{ color: 'var(--color-grey-3)', background: 'var(--color-surface)', boxShadow: CARD_SHADOW }}
       >
-        Henüz seçim yapılmadı.
+        {t('wall.empty')}
       </div>
     )
   }
@@ -122,19 +124,25 @@ function GroupWall({
               {locale === 'tr' ? category.name_tr : category.name}
             </p>
           </div>
-          <div className="pb-1">
+          <div className="flex flex-col gap-2 pb-2">
             {[...nomineeMap.values()].map(({ nominee, users }) => {
               const isWinner = winnerMap.get(nominee.id) ?? false
               return isWinner ? (
                 <div
                   key={nominee.id}
-                  className="mx-2 mb-1 flex items-center justify-between rounded-lg p-2"
+                  className="mx-2 mb-1 flex flex-col gap-1.5 rounded-lg p-2"
                   style={{
                     background: 'var(--color-warning-100)',
                     boxShadow: '0px 0px 0px 2px rgba(185,156,54,1.00), 0px 0px 0px 1px rgba(150,150,150,0.08)',
                   }}
                 >
-                  <div className="flex items-center gap-3 min-w-0">
+                  <span
+                    className="font-sans text-xs font-bold tracking-wide"
+                    style={{ color: '#967811' }}
+                  >
+                    {t('wall.winner')}
+                  </span>
+                  <div className="flex items-center justify-between gap-2">
                     <div className="flex flex-col min-w-0">
                       <span className="font-sans text-sm" style={{ color: 'var(--color-text)' }}>
                         {nominee.name}
@@ -145,14 +153,8 @@ function GroupWall({
                         </span>
                       )}
                     </div>
-                    <span
-                      className="font-sans text-sm font-bold tracking-wide shrink-0"
-                      style={{ color: '#967811' }}
-                    >
-                      KAZANAN
-                    </span>
+                    <AvatarStack users={users} />
                   </div>
-                  <AvatarStack users={users} />
                 </div>
               ) : (
                 <div
@@ -189,13 +191,15 @@ const RANK_COLORS: Record<number, string> = {
 }
 
 function Leaderboard({ results, isVoting }: { results: RankedScore[] | null; isVoting: boolean }) {
+  const { t } = useTranslation()
+
   if (isVoting || !results) {
     return (
       <div
         className="rounded-lg px-4 py-10 text-center font-sans text-sm"
         style={{ color: 'var(--color-grey-3)', background: 'var(--color-surface)', boxShadow: CARD_SHADOW }}
       >
-        Sonuçlar tören sonrasında açıklanacak.
+        {t('wall.resultsAfterCeremony')}
       </div>
     )
   }
@@ -242,7 +246,7 @@ type Tab = 'wall' | 'leaderboard'
 export default function WallPage() {
   const { year } = useParams()
   const router = useRouter()
-  const { locale } = useTranslation()
+  const { t, locale } = useTranslation()
 
   const searchParams = useSearchParams()
   const [tab, setTab] = useState<Tab>((searchParams.get('tab') as Tab) ?? 'wall')
@@ -298,7 +302,7 @@ export default function WallPage() {
             borderRight: '1px solid rgba(173,173,173,0.50)',
           }}
         >
-          Grup Duvarı
+          {t('wall.heading')}
         </button>
         <button
           onClick={() => setTab('leaderboard')}
@@ -309,7 +313,7 @@ export default function WallPage() {
             fontWeight: tab === 'leaderboard' ? 500 : 400,
           }}
         >
-          Sıralama
+          {t('results.leaderboard')}
         </button>
       </div>
 
@@ -317,12 +321,10 @@ export default function WallPage() {
       <div className="mb-4 flex items-start justify-between gap-4">
         <div>
           <h1 className="font-serif text-[26px] font-medium" style={{ color: 'var(--color-text)' }}>
-            {tab === 'wall' ? 'Grup Duvarı' : 'Sıralama'}
+            {tab === 'wall' ? t('wall.heading') : t('results.leaderboard')}
           </h1>
           <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>
-            {tab === 'wall'
-              ? 'Her yıl kimin ne seçtiğini gör'
-              : 'Kimin best Broscars olduğunu gör'}
+            {tab === 'wall' ? t('wall.wallSubtitle') : t('wall.leaderboardSubtitle')}
           </p>
         </div>
         <Select
@@ -334,7 +336,7 @@ export default function WallPage() {
 
       {loading ? (
         <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>
-          Yükleniyor...
+          {t('common.loading')}
         </p>
       ) : tab === 'wall' ? (
         <GroupWall picks={picks} nominees={nominees} locale={locale} />
