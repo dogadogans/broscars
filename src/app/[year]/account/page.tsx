@@ -428,7 +428,16 @@ export default function AccountPage() {
         const state: string = stateJson.data?.state ?? 'voting'
         setYearState(state)
 
-        const mine: PickWithDetails[] = myPicksJson.data?.picks ?? []
+        let mine: PickWithDetails[] = myPicksJson.data?.picks ?? []
+
+        // Token mismatch fallback: if my-picks returned empty, look up picks
+        // from the public endpoint filtered by display name
+        if (mine.length === 0) {
+          const allPicksJson = await fetch(`/api/${selectedYear}/picks`, { cache: 'no-store' }).then((r) => r.json())
+          const allPicks: PickWithDetails[] = allPicksJson.data ?? []
+          mine = allPicks.filter((p) => p.user.display_name === displayName)
+        }
+
         setMyPicks(mine)
         setMyPicksCount(mine.length)
 

@@ -3,6 +3,8 @@ import { supabase } from '@/lib/supabase/server'
 import { resolveUserFromToken } from '@/lib/utils/token'
 import type { ApiResponse, PickWithDetails } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/[year]/my-picks
 // Returns submitted picks for the authenticated user.
 // Requires x-device-token header.
