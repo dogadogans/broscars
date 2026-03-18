@@ -61,7 +61,10 @@
     "wallSubtitle": "Her yıl kimin ne seçtiğini gör",
     "leaderboardSubtitle": "Kimin best Broscars olduğunu gör",
     "resultsAfterCeremony": "Sonuçlar tören sonrasında açıklanacak.",
-    "winner": "KAZANAN"
+    "winner": "KAZANAN",
+    "allTime": "Tüm Zamanlar",
+    "allTimeSubtitle": "Tüm yılların sıralaması",
+    "yearsPlayed": "{{count}} yıl"
   },
   "results": {
     "heading": "Sonuçlar",

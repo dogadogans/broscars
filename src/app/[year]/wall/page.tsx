@@ -282,6 +282,7 @@ export default function WallPage() {
       .catch(() => {})
   }, [yearState, year])
 
+
   const isVoting = yearState !== 'results'
 
   return (

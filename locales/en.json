@@ -61,7 +61,10 @@
     "wallSubtitle": "See who picked what each year",
     "leaderboardSubtitle": "See who's the best Broscars",
     "resultsAfterCeremony": "Results will be revealed after the ceremony.",
-    "winner": "WINNER"
+    "winner": "WINNER",
+    "allTime": "All-Time",
+    "allTimeSubtitle": "Rankings across all years",
+    "yearsPlayed": "{{count}} yr"
   },
   "results": {
     "heading": "Results",

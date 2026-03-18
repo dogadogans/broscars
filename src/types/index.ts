@@ -86,6 +86,14 @@ export interface RankedScore {
   total_categories: number
 }
 
+export interface AllTimeRankedScore {
+  rank: number
+  user: { id: string; display_name: string; avatar_color: string }
+  total_score: number
+  heart_correct: number
+  years_participated: number
+}
+
 export interface ApiResponse<T> {
   data: T | null
   error: string | null

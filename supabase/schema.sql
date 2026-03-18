@@ -130,13 +130,15 @@ CREATE UNIQUE INDEX users_display_name_lower_idx ON users (lower(display_name));
 
 -- ============================================================
 -- ROW LEVEL SECURITY
--- All access in this app goes through the service role key via
--- Next.js API routes, so RLS is disabled by default.
--- To enable RLS for direct client access in future, uncomment:
+-- All data access goes through the service role key via Next.js
+-- API routes, which bypasses RLS. Enabling RLS here blocks direct
+-- anon/client access to all tables without affecting the app.
+-- No policies are needed — service role is exempt from RLS.
 -- ============================================================
--- ALTER TABLE years      ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE nominees   ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE users      ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE picks      ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE scores     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE years             ENABLE ROW LEVEL SECURITY;
+ALTER TABLE categories        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE nominees          ENABLE ROW LEVEL SECURITY;
+ALTER TABLE users             ENABLE ROW LEVEL SECURITY;
+ALTER TABLE picks             ENABLE ROW LEVEL SECURITY;
+ALTER TABLE scores            ENABLE ROW LEVEL SECURITY;
+ALTER TABLE year_participants  ENABLE ROW LEVEL SECURITY;

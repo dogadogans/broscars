@@ -8,7 +8,7 @@ import Select from '@/components/ui/Select'
 import { getAvatarColor } from '@/lib/utils/avatar'
 import { useDeviceToken } from '@/hooks/useDeviceToken'
 import { useTranslation } from '@/hooks/useTranslation'
-import type { RankedScore, PickWithDetails, CategoryWithNominees, Year } from '@/types'
+import type { RankedScore, AllTimeRankedScore, PickWithDetails, CategoryWithNominees, Year } from '@/types'
 
 const NAME_KEY  = 'broscar_display_name'
 const TOKEN_KEY = 'broscar_token'
@@ -82,43 +82,48 @@ function SectionHeader({
 
 function StatsTab({
   selectedYear,
-  yearOptions,
-  onYearChange,
+  statsYear,
+  statsYearOptions,
+  onStatsYearChange,
   yearState,
   myScore,
+  allTimeScore,
   myPicksCount,
   totalCategories,
   seasonsJoined,
   loading,
 }: {
   selectedYear: string
-  yearOptions: { label: string; value: string }[]
-  onYearChange: (y: string) => void
+  statsYear: string
+  statsYearOptions: { label: string; value: string }[]
+  onStatsYearChange: (y: string) => void
   yearState: string
   myScore: RankedScore | null
+  allTimeScore: AllTimeRankedScore | null
   myPicksCount: number
   totalCategories: number
   seasonsJoined: number
   loading: boolean
 }) {
   const { t } = useTranslation()
+  const isAllTime = statsYear === 'all-time'
   const isVoting = yearState === 'voting'
 
   return (
     <>
       <SectionHeader
         title={t('account.myStats')}
-        selectedYear={selectedYear}
-        yearOptions={yearOptions}
-        onYearChange={onYearChange}
+        selectedYear={statsYear}
+        yearOptions={statsYearOptions}
+        onYearChange={onStatsYearChange}
       />
 
-      {loading ? (
+      {loading && !isAllTime ? (
         <p className="font-sans text-sm" style={{ color: 'var(--color-grey-3)' }}>{t('common.loading')}</p>
       ) : (
         <>
-          {/* Voting progress card */}
-          {isVoting && myPicksCount < totalCategories && (
+          {/* Voting progress card — only for specific year view */}
+          {!isAllTime && isVoting && myPicksCount < totalCategories && (
             <div
               className="mb-4 overflow-hidden rounded-lg"
               style={{ background: 'var(--color-surface)', boxShadow: CARD_SHADOW }}
@@ -165,12 +170,20 @@ function StatsTab({
           <div className="grid grid-cols-2 gap-3">
             <StatCard
               label={t('account.totalScore')}
-              value={myScore ? `${myScore.score}/${myScore.total_categories}` : `—/${totalCategories || '—'}`}
+              value={
+                isAllTime
+                  ? (allTimeScore ? String(allTimeScore.total_score) : '—')
+                  : (myScore ? `${myScore.score}/${myScore.total_categories}` : `—/${totalCategories || '—'}`)
+              }
               accent
             />
             <StatCard
               label={t('account.rank')}
-              value={myScore ? `#${myScore.rank}` : '—'}
+              value={
+                isAllTime
+                  ? (allTimeScore ? `#${allTimeScore.rank}` : '—')
+                  : (myScore ? `#${myScore.rank}` : '—')
+              }
             />
             <StatCard
               label={t('account.seasonsJoined')}
@@ -178,7 +191,11 @@ function StatsTab({
             />
             <StatCard
               label={t('account.accuracy')}
-              value={myScore ? `${myScore.accuracy}%` : '—'}
+              value={
+                isAllTime
+                  ? '—'
+                  : (myScore ? `${myScore.accuracy}%` : '—')
+              }
             />
           </div>
         </>
@@ -369,6 +386,8 @@ export default function AccountPage() {
   const [tab, setTab]                       = useState<Tab>(searchParams.get('tab') === 'picks' ? 'picks' : 'stats')
   const [years, setYears]                   = useState<Year[]>([])
   const [selectedYear, setSelectedYear]     = useState(paramYear)
+  const [statsYear, setStatsYear]           = useState<string>(paramYear)
+  const [allTimeScore, setAllTimeScore]     = useState<AllTimeRankedScore | null>(null)
 
   // Per-year data
   const [yearState, setYearState]           = useState<string>('voting')
@@ -382,6 +401,18 @@ export default function AccountPage() {
   // All-time
   const [seasonsJoined, setSeasonsJoined]   = useState(0)
   const [logoutHovered, setLogoutHovered]   = useState(false)
+
+  // Fetch all-time scores once
+  useEffect(() => {
+    if (!displayName) return
+    fetch('/api/all-time', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((json) => {
+        const entries: AllTimeRankedScore[] = json.data ?? []
+        setAllTimeScore(entries.find((e) => e.user.display_name === displayName) ?? null)
+      })
+      .catch(() => {})
+  }, [displayName])
 
   // Initialize: read name, fetch years
   useEffect(() => {
@@ -467,6 +498,12 @@ export default function AccountPage() {
   if (!displayName) return null
 
   const yearOptions = years.map((y) => ({ label: String(y.year), value: String(y.year) }))
+  const statsYearOptions = [{ label: t('wall.allTime'), value: 'all-time' }, ...yearOptions]
+
+  function handleStatsYearChange(y: string) {
+    setStatsYear(y)
+    if (y !== 'all-time') setSelectedYear(y)
+  }
 
   // Winner lookup map
   const winnerMap = new Map<string, boolean>()
@@ -535,10 +572,12 @@ export default function AccountPage() {
       {tab === 'stats' ? (
         <StatsTab
           selectedYear={selectedYear}
-          yearOptions={yearOptions}
-          onYearChange={setSelectedYear}
+          statsYear={statsYear}
+          statsYearOptions={statsYearOptions}
+          onStatsYearChange={handleStatsYearChange}
           yearState={yearState}
           myScore={myScore}
+          allTimeScore={allTimeScore}
           myPicksCount={myPicksCount}
           totalCategories={totalCategories}
           seasonsJoined={seasonsJoined}
