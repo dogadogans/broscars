@@ -275,7 +275,7 @@ export default function WallPage() {
   }, [year])
 
   useEffect(() => {
-    if (yearState !== 'results') return
+    if (yearState !== 'results' && yearState !== 'offseason') return
     fetch(`/api/${year}/results`, { cache: 'no-store' })
       .then((r) => r.json())
       .then((json) => setResults(json.data ?? null))
@@ -283,7 +283,7 @@ export default function WallPage() {
   }, [yearState, year])
 
 
-  const isVoting = yearState !== 'results'
+  const isVoting = yearState !== 'results' && yearState !== 'offseason'
 
   return (
     <div className="px-4">

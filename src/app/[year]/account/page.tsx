@@ -476,7 +476,7 @@ export default function AccountPage() {
         setNominees(noms)
         setTotalCategories(noms.length)
 
-        if (state === 'results') {
+        if (state === 'results' || state === 'offseason') {
           const resultsJson = await fetch(`/api/${selectedYear}/results`).then((r) => r.json())
           const results: RankedScore[] = resultsJson.data ?? []
           setMyScore(results.find((r) => r.user.display_name === displayName) ?? null)
