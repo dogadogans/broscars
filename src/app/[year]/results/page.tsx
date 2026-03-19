@@ -17,7 +17,7 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (state !== 'results' && state !== null) {
+    if (state !== 'results' && state !== 'offseason' && state !== null) {
       setLoading(false)
       return
     }
@@ -43,7 +43,7 @@ export default function ResultsPage() {
   }
 
   // Not results state — show a holding message
-  if (state !== 'results') {
+  if (state !== 'results' && state !== 'offseason') {
     return (
       <div className="px-4">
         <div className="mx-auto w-full max-w-[480px] py-16 text-center">

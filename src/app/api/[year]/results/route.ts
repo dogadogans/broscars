@@ -18,7 +18,7 @@ export async function GET(
     // To preview results screen: temporarily set MOCK_YEARS[0].state = 'results' in mock.ts
     const year = parseInt(params.year, 10)
     const mockYear = MOCK_YEARS.find((y) => y.year === year) ?? MOCK_YEARS[0]
-    if (mockYear.state !== 'results') {
+    if (mockYear.state !== 'results' && mockYear.state !== 'offseason') {
       return NextResponse.json<ApiResponse<null>>(
         { data: null, error: 'Results are not yet available' },
         { status: 403 }
@@ -51,7 +51,7 @@ export async function GET(
       )
     }
 
-    if (yearRecord.state !== 'results') {
+    if (yearRecord.state !== 'results' && yearRecord.state !== 'offseason') {
       return NextResponse.json<ApiResponse<null>>(
         { data: null, error: 'Results are not yet available' },
         { status: 403 }
