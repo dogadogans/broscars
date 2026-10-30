@@ -3,7 +3,6 @@ import { Noto_Sans, Noto_Serif } from 'next/font/google'
 import './globals.css'
 import { LangProvider } from '@/context/LangContext'
 import Nav from '@/components/layout/Nav'
-import Footer from '@/components/layout/Footer'
 
 const notoSans = Noto_Sans({
   subsets: ['latin', 'latin-ext'],
@@ -42,7 +41,6 @@ export default function RootLayout({
           <div className="flex min-h-screen flex-col">
             <Nav />
             <main id="main-content" className="flex-1">{children}</main>
-            <Footer />
           </div>
         </LangProvider>
       </body>
