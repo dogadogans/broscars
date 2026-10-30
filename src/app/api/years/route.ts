@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import { isMock, MOCK_YEARS } from '@/lib/mock'
 import type { ApiResponse, Year } from '@/types'
 
@@ -13,10 +14,7 @@ export async function GET() {
     return NextResponse.json<ApiResponse<Year[]>>({ data: MOCK_YEARS as Year[], error: null })
   }
   try {
-    const { data, error } = await supabase
-      .from('years')
-      .select('id, year, state, created_at')
-      .order('year', { ascending: false })
+    const { data, error } = await db.many<Models.Year>(`SELECT id, year, state, created_at FROM "years" ORDER BY "year" DESC`)
 
     if (error) throw error
 

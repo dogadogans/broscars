@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import { isMock, MOCK_YEARS } from '@/lib/mock'
 import type { ApiResponse, GameState, Year } from '@/types'
 
@@ -27,11 +28,7 @@ export async function GET(
       )
     }
 
-    const { data, error } = await supabase
-      .from('years')
-      .select('id, year, state, created_at')
-      .eq('year', year)
-      .single()
+    const { data, error } = await db.one<Models.Year>(`SELECT id, year, state, created_at FROM "years" WHERE "year" = $1`, [year])
 
     if (error || !data) {
       return NextResponse.json<ApiResponse<null>>(

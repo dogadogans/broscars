@@ -1,4 +1,4 @@
-// Mock data for local development without Supabase.
+// Mock data for local development without a database connection.
 // Enabled when MOCK_MODE=true in .env.local.
 
 export function isMock() {

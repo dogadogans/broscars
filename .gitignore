@@ -19,6 +19,13 @@ next-env.d.ts
 # Vercel
 .vercel
 
+# Private database exports
+local-backups/
+
 # OS
 .DS_Store
 Thumbs.db
+.neon
+
+.vercel
+.env*

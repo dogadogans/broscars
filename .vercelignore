@@ -1,0 +1,8 @@
+local-backups/
+.env*
+.neon
+.git/
+.claude/
+.codex/
+.agents/
+*.tsbuildinfo

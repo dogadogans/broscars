@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import { isMock, getMockNominees } from '@/lib/mock'
 import type { ApiResponse, CategoryWithNominees } from '@/types'
 
@@ -29,11 +30,7 @@ export async function GET(
     }
 
     // Resolve year record
-    const { data: yearRecord, error: yearError } = await supabase
-      .from('years')
-      .select('id')
-      .eq('year', year)
-      .single()
+    const { data: yearRecord, error: yearError } = await db.one<Models.Year>(`SELECT id FROM "years" WHERE "year" = $1`, [year])
 
     if (yearError || !yearRecord) {
       return NextResponse.json<ApiResponse<null>>(
@@ -42,20 +39,13 @@ export async function GET(
       )
     }
 
-    const { data: categories, error: catError } = await supabase
-      .from('categories')
-      .select('*')
-      .eq('year_id', yearRecord.id)
-      .order('order_index', { ascending: true })
+    const { data: categories, error: catError } = await db.many<Models.Category>(`SELECT * FROM "categories" WHERE "year_id" = $1 ORDER BY "order_index" ASC`, [yearRecord.id])
 
     if (catError) throw catError
 
     const categoryIds = (categories ?? []).map((c: { id: string }) => c.id)
 
-    const { data: nominees, error: nomError } = await supabase
-      .from('nominees')
-      .select('id, category_id, name, film_title, is_winner')
-      .in('category_id', categoryIds)
+    const { data: nominees, error: nomError } = await db.many<Models.Nominee>(`SELECT id, category_id, name, film_title, is_winner FROM "nominees" WHERE "category_id" = ANY($1)`, [categoryIds])
 
     if (nomError) throw nomError
 

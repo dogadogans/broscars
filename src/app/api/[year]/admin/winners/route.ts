@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import { calculateScores } from '@/lib/utils/scoring'
 import type { ApiResponse, UserPick, User } from '@/types'
 
@@ -38,11 +39,7 @@ export async function POST(
     const winners: { nominee_id: string }[] = body.winners ?? []
     const winnerIds = winners.map((w) => w.nominee_id)
 
-    const { data: yearRecord, error: yearError } = await supabase
-      .from('years')
-      .select('id')
-      .eq('year', year)
-      .single()
+    const { data: yearRecord, error: yearError } = await db.one<Models.Year>(`SELECT id FROM "years" WHERE "year" = $1`, [year])
 
     if (yearError || !yearRecord) {
       return NextResponse.json<ApiResponse<null>>(
@@ -52,52 +49,32 @@ export async function POST(
     }
 
     // Reset all nominees for this year to is_winner = false
-    const { data: categoryIds } = await supabase
-      .from('categories')
-      .select('id')
-      .eq('year_id', yearRecord.id)
+    const { data: categoryIds } = await db.many<Models.Category>(`SELECT id FROM "categories" WHERE "year_id" = $1`, [yearRecord.id])
 
     if (categoryIds && categoryIds.length > 0) {
-      await supabase
-        .from('nominees')
-        .update({ is_winner: false })
-        .in('category_id', categoryIds.map((c: { id: string }) => c.id))
+      await db.many<Models.Nominee>(`UPDATE "nominees" SET "is_winner" = $1 WHERE "category_id" = ANY($2) RETURNING *`, [false, categoryIds.map((c: { id: string }) => c.id)])
     }
 
     // Set winners
     if (winnerIds.length > 0) {
-      const { error: winnerError } = await supabase
-        .from('nominees')
-        .update({ is_winner: true })
-        .in('id', winnerIds)
+      const { error: winnerError } = await db.many<Models.Nominee>(`UPDATE "nominees" SET "is_winner" = $1 WHERE "id" = ANY($2) RETURNING *`, [true, winnerIds])
 
       if (winnerError) throw winnerError
     }
 
     // Fetch all submitted picks for the year
-    const { data: picks, error: picksError } = await supabase
-      .from('picks')
-      .select('*')
-      .eq('year_id', yearRecord.id)
-      .not('submitted_at', 'is', null)
+    const { data: picks, error: picksError } = await db.many<Models.UserPick>(`SELECT * FROM "picks" WHERE "year_id" = $1 AND "submitted_at" IS NOT NULL`, [yearRecord.id])
 
     if (picksError) throw picksError
 
     // Fetch all users who have picks
     const userIds = [...new Set((picks ?? []).map((p: UserPick) => p.user_id))]
-    const { data: users, error: usersError } = await supabase
-      .from('users')
-      .select('id, display_name, avatar_color')
-      .in('id', userIds)
+    const { data: users, error: usersError } = await db.many<Models.User>(`SELECT id, display_name, avatar_color FROM "users" WHERE "id" = ANY($1)`, [userIds])
 
     if (usersError) throw usersError
 
     // Fetch actual is_winner nominees from DB (authoritative source, not just submitted IDs)
-    const { data: dbWinners } = await supabase
-      .from('nominees')
-      .select('id')
-      .eq('is_winner', true)
-      .in('category_id', (categoryIds ?? []).map((c: { id: string }) => c.id))
+    const { data: dbWinners } = await db.many<Models.Nominee>(`SELECT id FROM "nominees" WHERE "is_winner" = $1 AND "category_id" = ANY($2)`, [true, (categoryIds ?? []).map((c: { id: string }) => c.id)])
 
     const winnerIdSet = new Set([...(dbWinners ?? []).map((n: { id: string }) => n.id)])
     console.log('[winners] submitted:', winnerIds.length, 'db_winners:', winnerIdSet.size, 'picks:', (picks ?? []).length)
@@ -113,9 +90,7 @@ export async function POST(
       calculated_at: new Date().toISOString(),
     }))
 
-    const { error: scoresError } = await supabase
-      .from('scores')
-      .upsert(scoreRows, { onConflict: 'user_id,year_id' })
+    const { error: scoresError } = await db.write("scores", scoreRows, "user_id,year_id", false)
 
     if (scoresError) throw scoresError
 

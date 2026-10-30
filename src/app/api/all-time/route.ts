@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import type { ApiResponse, AllTimeRankedScore } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -9,10 +10,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const { data: resultYears, error: yearsError } = await supabase
-      .from('years')
-      .select('id')
-      .eq('state', 'results')
+    const { data: resultYears, error: yearsError } = await db.many<Models.Year>(`SELECT id FROM "years" WHERE "state" = $1`, ['results'])
 
     if (yearsError) throw yearsError
 
@@ -25,11 +23,8 @@ export async function GET() {
 
     const yearIds = resultYears.map((y: { id: string }) => y.id)
 
-    // Fetch scores separately to avoid PostgREST join caching
-    const { data: scores, error: scoresError } = await supabase
-      .from('scores')
-      .select('user_id, score, heart_correct')
-      .in('year_id', yearIds)
+    // Load scores and public player details for ranking.
+    const { data: scores, error: scoresError } = await db.many<Models.Score>(`SELECT user_id, score, heart_correct FROM "scores" WHERE "year_id" = ANY($1)`, [yearIds])
 
     if (scoresError) throw scoresError
 
@@ -55,10 +50,7 @@ export async function GET() {
       )
     }
 
-    const { data: users, error: usersError } = await supabase
-      .from('users')
-      .select('id, display_name, avatar_color')
-      .in('id', userIds)
+    const { data: users, error: usersError } = await db.many<Models.User>(`SELECT id, display_name, avatar_color FROM "users" WHERE "id" = ANY($1)`, [userIds])
 
     if (usersError) throw usersError
 

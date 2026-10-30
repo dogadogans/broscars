@@ -32,15 +32,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-
   return (
     <html lang="tr" className={`${notoSans.variable} ${notoSerif.variable}`}>
-      <head>
-        {supabaseUrl && (
-          <link rel="preconnect" href={supabaseUrl} />
-        )}
-      </head>
       <body>
         <LangProvider>
           <a className="skip-link" href="#main-content">

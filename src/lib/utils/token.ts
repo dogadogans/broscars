@@ -1,5 +1,6 @@
 // Server-side utility — import only in API route files.
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import type { User } from '@/types'
 
 /**
@@ -9,11 +10,7 @@ import type { User } from '@/types'
 export async function resolveUserFromToken(token: string | null): Promise<User | null> {
   if (!token) return null
 
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('token', token)
-    .single()
+  const { data, error } = await db.one<Models.User>("SELECT * FROM \"users\" WHERE \"token\" = $1", [token])
 
   if (error || !data) return null
   return data as User

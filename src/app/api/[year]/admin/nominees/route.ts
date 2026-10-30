@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import type { ApiResponse } from '@/types'
 
 function validateAdminPassword(req: NextRequest): boolean {
@@ -17,7 +18,7 @@ interface NomineeInput {
 interface CategoryInput {
   name: string
   name_tr: string
-  group: string
+  group: Models.CategoryGroup
   order_index: number
   nominees: NomineeInput[]
 }
@@ -52,20 +53,12 @@ export async function POST(
 
     // Get or create year (never overwrite existing state)
     let yearRecord: { id: string; year: number; state: string } | null = null
-    const { data: existingYear } = await supabase
-      .from('years')
-      .select('id, year, state')
-      .eq('year', year)
-      .single()
+    const { data: existingYear } = await db.one<Models.Year>(`SELECT id, year, state FROM "years" WHERE "year" = $1`, [year])
 
     if (existingYear) {
       yearRecord = existingYear
     } else {
-      const { data: newYear, error: newYearError } = await supabase
-        .from('years')
-        .insert({ year, state: 'voting' })
-        .select()
-        .single()
+      const { data: newYear, error: newYearError } = await db.writeOne("years", { year, state: 'voting' })
       if (newYearError || !newYear) throw newYearError ?? new Error('Failed to create year')
       yearRecord = newYear
     }
@@ -74,20 +67,13 @@ export async function POST(
 
     for (const cat of categories) {
       // Upsert category
-      const { data: catRecord, error: catError } = await supabase
-        .from('categories')
-        .upsert(
-          {
+      const { data: catRecord, error: catError } = await db.writeOne("categories", {
             year_id: yearRecord.id,
             name: cat.name,
             name_tr: cat.name_tr,
             group: cat.group,
             order_index: cat.order_index,
-          },
-          { onConflict: 'year_id,name' }
-        )
-        .select()
-        .single()
+          }, "year_id,name", false)
 
       if (catError || !catRecord) throw catError ?? new Error('Failed to upsert category')
 
@@ -98,9 +84,7 @@ export async function POST(
         film_title: n.film_title ?? null,
       }))
 
-      const { error: nomError } = await supabase
-        .from('nominees')
-        .upsert(nomineeRows, { onConflict: 'category_id,name', ignoreDuplicates: true })
+      const { error: nomError } = await db.write("nominees", nomineeRows, "category_id,name", true)
 
       if (nomError) throw nomError
     }

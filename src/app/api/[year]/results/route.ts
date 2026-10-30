@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import { rankScores } from '@/lib/utils/scoring'
 import { isMock, getMockResults, MOCK_YEARS } from '@/lib/mock'
 import type { ApiResponse, RankedScore } from '@/types'
@@ -38,11 +39,7 @@ export async function GET(
       )
     }
 
-    const { data: yearRecord, error: yearError } = await supabase
-      .from('years')
-      .select('id, state')
-      .eq('year', year)
-      .single()
+    const { data: yearRecord, error: yearError } = await db.one<Models.Year>(`SELECT id, state FROM "years" WHERE "year" = $1`, [year])
 
     if (yearError || !yearRecord) {
       return NextResponse.json<ApiResponse<null>>(
@@ -58,28 +55,19 @@ export async function GET(
       )
     }
 
-    // Fetch scores separately to avoid PostgREST join caching
-    const { data: scores, error: scoresError } = await supabase
-      .from('scores')
-      .select('user_id, score, heart_correct')
-      .eq('year_id', yearRecord.id)
+    // Load scores and public player details for ranking.
+    const { data: scores, error: scoresError } = await db.many<Models.Score>(`SELECT user_id, score, heart_correct FROM "scores" WHERE "year_id" = $1`, [yearRecord.id])
 
     if (scoresError) throw scoresError
 
     const userIds = (scores ?? []).map((s: { user_id: string }) => s.user_id)
 
-    const { data: users, error: usersError } = await supabase
-      .from('users')
-      .select('id, display_name, avatar_color')
-      .in('id', userIds)
+    const { data: users, error: usersError } = await db.many<Models.User>(`SELECT id, display_name, avatar_color FROM "users" WHERE "id" = ANY($1)`, [userIds])
 
     if (usersError) throw usersError
 
     // Count total categories for accuracy calculation
-    const { count: totalCategories } = await supabase
-      .from('categories')
-      .select('id', { count: 'exact', head: true })
-      .eq('year_id', yearRecord.id)
+    const { count: totalCategories } = await db.count(`SELECT count(*)::int AS count FROM "categories" WHERE "year_id" = $1`, [yearRecord.id])
 
     const scoreResults = (scores ?? []).map((s: { user_id: string; score: number; heart_correct: number }) => ({
       user_id: s.user_id,

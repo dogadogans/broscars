@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db, type PickRow } from '@/lib/db'
+import type * as Models from '@/types'
 import { resolveUserFromToken } from '@/lib/utils/token'
 import type { ApiResponse, PickWithDetails } from '@/types'
 
@@ -28,11 +29,7 @@ export async function GET(
     )
   }
 
-  const { data: yearRecord } = await supabase
-    .from('years')
-    .select('id')
-    .eq('year', year)
-    .single()
+  const { data: yearRecord } = await db.one<Models.Year>(`SELECT id FROM "years" WHERE "year" = $1`, [year])
 
   if (!yearRecord) {
     return NextResponse.json<ApiResponse<{ picks: PickWithDetails[]; submitted_count: number }>>(
@@ -40,18 +37,7 @@ export async function GET(
     )
   }
 
-  const { data: rows, error } = await supabase
-    .from('picks')
-    .select(`
-      *,
-      user:users(id, display_name, avatar_color),
-      category:categories(id, name, name_tr),
-      head_nominee:nominees!head_nominee_id(id, name, film_title),
-      heart_nominee:nominees!heart_nominee_id(id, name, film_title)
-    `)
-    .eq('user_id', user.id)
-    .eq('year_id', yearRecord.id)
-    .not('submitted_at', 'is', null)
+  const { data: rows, error } = await db.many<PickRow>(`SELECT p.*, json_build_object('id', u.id, 'display_name', u.display_name, 'avatar_color', u.avatar_color) AS "user", json_build_object('id', c.id, 'name', c.name, 'name_tr', c.name_tr) AS category, json_build_object('id', h.id, 'name', h.name, 'film_title', h.film_title) AS head_nominee, CASE WHEN heart.id IS NULL THEN NULL ELSE json_build_object('id', heart.id, 'name', heart.name, 'film_title', heart.film_title) END AS heart_nominee FROM picks p JOIN users u ON u.id = p.user_id JOIN categories c ON c.id = p.category_id JOIN nominees h ON h.id = p.head_nominee_id LEFT JOIN nominees heart ON heart.id = p.heart_nominee_id WHERE p."user_id" = $1 AND p."year_id" = $2 AND p."submitted_at" IS NOT NULL`, [user.id, yearRecord.id])
 
   if (error) {
     return NextResponse.json<ApiResponse<null>>(
@@ -59,9 +45,7 @@ export async function GET(
       { status: 500 }
     )
   }
-
-  // eslint-disable-next-line -- supabase join type
-  const picks: PickWithDetails[] = (rows ?? []).map((row: any) => ({
+  const picks: PickWithDetails[] = (rows ?? []).map((row) => ({
     pick: {
       id: row.id,
       user_id: row.user_id,

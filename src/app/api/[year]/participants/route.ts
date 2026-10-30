@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import type { ApiResponse } from '@/types'
 
 // GET /api/[year]/participants
@@ -19,11 +20,7 @@ export async function GET(
       )
     }
 
-    const { data: yearRecord, error: yearError } = await supabase
-      .from('years')
-      .select('id')
-      .eq('year', year)
-      .single()
+    const { data: yearRecord, error: yearError } = await db.one<Models.Year>(`SELECT id FROM "years" WHERE "year" = $1`, [year])
 
     if (yearError || !yearRecord) {
       return NextResponse.json<ApiResponse<null>>(
@@ -32,10 +29,7 @@ export async function GET(
       )
     }
 
-    const { count, error } = await supabase
-      .from('year_participants')
-      .select('user_id', { count: 'exact', head: true })
-      .eq('year_id', yearRecord.id)
+    const { count, error } = await db.count(`SELECT count(*)::int AS count FROM "year_participants" WHERE "year_id" = $1`, [yearRecord.id])
 
     if (error) throw error
 

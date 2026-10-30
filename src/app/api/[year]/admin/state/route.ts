@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import type { ApiResponse, GameState, Year } from '@/types'
 
 function validateAdminPassword(req: NextRequest): boolean {
@@ -41,12 +42,7 @@ export async function POST(
       )
     }
 
-    const { data, error } = await supabase
-      .from('years')
-      .update({ state })
-      .eq('year', year)
-      .select()
-      .single()
+    const { data, error } = await db.one<Models.Year>(`UPDATE "years" SET "state" = $1 WHERE "year" = $2 RETURNING *`, [state, year])
 
     if (error || !data) {
       return NextResponse.json<ApiResponse<null>>(

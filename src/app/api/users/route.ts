@@ -1,6 +1,7 @@
 import { createHash } from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/server'
+import { db } from '@/lib/db'
+import type * as Models from '@/types'
 import { getAvatarColor } from '@/lib/utils/avatar'
 import { isMock } from '@/lib/mock'
 import type { ApiResponse, User } from '@/types'
@@ -11,15 +12,9 @@ function hashPin(pin: string) {
 
 async function recordYearParticipant(userId: string, year: number | undefined) {
   if (!year) return
-  const { data: yearRecord } = await supabase
-    .from('years')
-    .select('id')
-    .eq('year', year)
-    .single()
+  const { data: yearRecord } = await db.one<Models.Year>(`SELECT id FROM "years" WHERE "year" = $1`, [year])
   if (!yearRecord) return
-  await supabase
-    .from('year_participants')
-    .upsert({ user_id: userId, year_id: yearRecord.id }, { onConflict: 'user_id,year_id', ignoreDuplicates: true })
+  await db.write("year_participants", { user_id: userId, year_id: yearRecord.id }, "user_id,year_id", true)
 }
 
 // POST /api/users
@@ -68,11 +63,7 @@ export async function POST(req: NextRequest) {
 
     // 1. If a token is provided and matches an existing user, return them directly.
     if (clientToken) {
-      const { data: existing } = await supabase
-        .from('users')
-        .select('*')
-        .eq('token', clientToken)
-        .single()
+      const { data: existing } = await db.one<Models.User>(`SELECT * FROM "users" WHERE "token" = $1`, [clientToken])
 
       if (existing) {
         await recordYearParticipant(existing.id, year)
@@ -83,11 +74,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Check if display_name already exists.
-    const { data: nameMatch } = await supabase
-      .from('users')
-      .select('*')
-      .ilike('display_name', display_name.trim())
-      .maybeSingle()
+    const { data: nameMatch } = await db.one<Models.User>(`SELECT * FROM "users" WHERE "display_name" ILIKE $1`, [display_name.trim()])
 
     if (nameMatch) {
       const user = nameMatch as User
@@ -108,7 +95,7 @@ export async function POST(req: NextRequest) {
       if (!user.pin_hash && pin) updates.pin_hash = hashPin(pin)
 
       if (Object.keys(updates).length > 0) {
-        await supabase.from('users').update(updates).eq('id', user.id)
+        await db.many<Models.User>(`UPDATE "users" SET token = COALESCE($1, token), pin_hash = COALESCE($2, pin_hash) WHERE "id" = $3 RETURNING *`, [updates.token ?? null, updates.pin_hash ?? null, user.id])
       }
 
       const returnedToken = clientToken ?? user.token
@@ -123,11 +110,7 @@ export async function POST(req: NextRequest) {
     const avatar_color = getAvatarColor(display_name.trim())
     const pin_hash = pin ? hashPin(pin) : null
 
-    const { data, error } = await supabase
-      .from('users')
-      .insert({ token, display_name: display_name.trim(), avatar_color, pin_hash })
-      .select()
-      .single()
+    const { data, error } = await db.writeOne("users", { token, display_name: display_name.trim(), avatar_color, pin_hash })
 
     if (error) throw error
 
