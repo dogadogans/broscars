@@ -14,6 +14,8 @@
     "viewLeaderboard": "View leaderboard",
     "votingOpen": "Voting is open",
     "votingClosed": "Voting is closed",
+    "seasonNotStarted": "Season hasn't started yet",
+    "seasonComingSoon": "A new season is on the way",
     "participantCount": "{{count}} joined",
     "loginPrompt": "Log in to your account",
     "join": "Join",

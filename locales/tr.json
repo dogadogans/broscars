@@ -14,6 +14,8 @@
     "viewLeaderboard": "Sıralamayı gör",
     "votingOpen": "Oylar açık",
     "votingClosed": "Oylar kapalı",
+    "seasonNotStarted": "Sezon henüz başlamadı",
+    "seasonComingSoon": "Yeni sezon yaklaşıyor",
     "participantCount": "{{count}} kişi katıldı",
     "loginPrompt": "Hesaba giriş yap",
     "join": "Katıl",

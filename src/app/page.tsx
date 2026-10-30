@@ -8,6 +8,7 @@ import Button from '@/components/ui/Button'
 import { getAvatarColor } from '@/lib/utils/avatar'
 import { useDeviceToken } from '@/hooks/useDeviceToken'
 import { useTranslation } from '@/hooks/useTranslation'
+import { FEATURED_SEASON_YEAR } from '@/lib/season'
 import type { Year } from '@/types'
 
 const ICON_RING = '0 0 0 1px rgba(152,150,150,0.50), 0 1px 2px rgba(44,41,41,0.08)'
@@ -127,8 +128,10 @@ export default function HomePage() {
     }
   }
 
-  const votingOpen = currentYear?.state === 'voting'
+  const upcoming = !!currentYear && (currentYear.year < FEATURED_SEASON_YEAR || currentYear.state === 'offseason')
+  const votingOpen = !upcoming && currentYear?.state === 'voting'
   const year = currentYear?.year
+  const featuredYear = Math.max(FEATURED_SEASON_YEAR, year ?? FEATURED_SEASON_YEAR)
 
   // Derive in-progress pick count from localStorage
   let sessionPickCount = 0
@@ -212,13 +215,15 @@ export default function HomePage() {
                 className="font-serif text-2xl font-medium"
                 style={{ color: 'var(--color-text)' }}
               >
-                Oscars {year}
+                Oscars {featuredYear}
               </div>
               <div className="flex items-center gap-2">
                 <div
                   className="h-2.5 w-2.5 rounded-full"
                   style={{
-                    background: votingOpen
+                    background: upcoming
+                      ? 'var(--color-warning-500)'
+                      : votingOpen
                       ? 'var(--color-success-400)'
                       : 'var(--color-danger-500)',
                   }}
@@ -227,7 +232,7 @@ export default function HomePage() {
                   className="font-sans text-base font-medium"
                   style={{ color: 'var(--color-text)' }}
                 >
-                  {votingOpen ? t('home.votingOpen') : t('home.votingClosed')}
+                  {upcoming ? t('home.seasonNotStarted') : votingOpen ? t('home.votingOpen') : t('home.votingClosed')}
                 </span>
               </div>
             </div>
@@ -235,12 +240,12 @@ export default function HomePage() {
               className="font-sans text-xs"
               style={{ color: 'var(--color-text-muted)' }}
             >
-              {t('home.participantCount', { count: participantCount })}
+              {upcoming ? t('home.seasonComingSoon') : t('home.participantCount', { count: participantCount })}
             </div>
           </div>
 
           {/* Card bottom — state-dependent */}
-          <div
+          {(!upcoming || (year != null && year < featuredYear)) && <div
             className="px-5 py-5"
             style={{ borderTop: '1px solid var(--color-border)' }}
           >
@@ -444,7 +449,7 @@ export default function HomePage() {
                 </Button>
               </div>
             )}
-          </div>
+          </div>}
         </div>
       )}
     </div>

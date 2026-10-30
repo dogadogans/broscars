@@ -1,0 +1,1 @@
+export const FEATURED_SEASON_YEAR = 2027

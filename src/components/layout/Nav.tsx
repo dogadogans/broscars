@@ -9,6 +9,7 @@ import { getAvatarColor } from '@/lib/utils/avatar'
 import { useGameState } from '@/hooks/useGameState'
 import { useTranslation } from '@/hooks/useTranslation'
 import { useLang } from '@/context/LangContext'
+import { FEATURED_SEASON_YEAR } from '@/lib/season'
 import { Check, Languages, Swords, User } from 'lucide-react'
 import type { Locale } from '@/types'
 
@@ -102,7 +103,7 @@ export default function Nav() {
               BROSCARS
             </div>
             <div className="text-sm font-normal font-sans text-[var(--color-grey-3)] truncate">
-              {year ? <Subtitle year={year} /> : 'Oscars 2026'}
+              {year ? <Subtitle year={year} /> : `Oscars ${Math.max(FEATURED_SEASON_YEAR, fallbackYear ?? FEATURED_SEASON_YEAR)}`}
             </div>
           </div>
         </Link>
